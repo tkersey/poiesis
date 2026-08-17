@@ -1,6 +1,8 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
-import { readFile } from "node:fs/promises";
+import { lstat, readFile } from "node:fs/promises";
+import { dirname, join, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 
 const parentPath = new URL("../conformance/poiesis-v1/parent.lock.json", import.meta.url);
 const childPath = new URL("../conformance/poiesis-v1/child-stack.lock.json", import.meta.url);
@@ -61,4 +63,33 @@ for (const name of ["agent", "world"]) {
 assert.ok(!packageManifest.includes(".path ="), "local path dependency is forbidden");
 
 const digest = (value) => createHash("sha256").update(value).digest("hex");
-process.stdout.write(`parent_lock_sha256=${digest(await readFile(parentPath))}\nchild_stack_lock_sha256=${digest(await readFile(childPath))}\nlocks=true\n`);
+const repositoryRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+const scaffoldPath = join(repositoryRoot, "conformance/poiesis-v1/scaffold.lock.json");
+
+function command(args, allowFailure = false) {
+  const result = Bun.spawnSync(["git", ...args], { cwd: repositoryRoot, stdout: "pipe", stderr: "pipe" });
+  if (result.error || (!allowFailure && result.exitCode !== 0)) throw new Error(`git ${args.join(" ")} failed`);
+  return { status: result.exitCode, stdout: result.stdout ? Buffer.from(result.stdout) : Buffer.alloc(0) };
+}
+
+function canonical(value) { if (value === null || typeof value !== "object") return JSON.stringify(value); if (Array.isArray(value)) return `[${value.map(canonical).join(",")}]`; return `{${Object.keys(value).sort().map((key) => `${JSON.stringify(key)}:${canonical(value[key])}`).join(",")}}`; }
+
+async function verifyScaffoldLock() {
+  try { await lstat(scaffoldPath); } catch (error) { if (error?.code === "ENOENT") return null; throw error; }
+  const lockBytes = await readFile(scaffoldPath); const lock = JSON.parse(lockBytes); assert.equal(lock.format, "poiesis-scaffold-lock/v1");
+  assert.equal(command(["rev-parse", "poiesis-v1-scaffold^{commit}"]).stdout.toString("utf8").trim(), lock.baselineCommit);
+  assert.equal(digest(command(["ls-tree", "-r", "-z", lock.baselineCommit]).stdout), lock.treeSha256);
+  const tracked = command(["ls-tree", "-r", "--name-only", lock.baselineCommit]).stdout.toString("utf8").trim().split("\n").filter(Boolean).sort();
+  const classified = [...Object.keys(lock.immutableFiles), ...Object.keys(lock.writableStubs)].sort(); assert.deepEqual(classified, tracked);
+  for (const [path, expected] of Object.entries(lock.immutableFiles)) assert.equal(digest(command(["show", `${lock.baselineCommit}:${path}`]).stdout), expected, `immutable scaffold digest mismatch: ${path}`);
+  for (const [path, expected] of Object.entries(lock.writableStubs)) { const bytes = command(["show", `${lock.baselineCommit}:${path}`]).stdout; assert.equal(digest(bytes), expected.sha256); assert.equal(command(["rev-parse", `${lock.baselineCommit}:${path}`]).stdout.toString("utf8").trim(), expected.git_blob_oid); assert.ok(bytes.length <= expected.maximum_bytes); }
+  assert.equal(lock.parentLockSha256, digest(command(["show", `${lock.baselineCommit}:conformance/poiesis-v1/parent.lock.json`]).stdout)); assert.equal(lock.childStackLockSha256, digest(command(["show", `${lock.baselineCommit}:conformance/poiesis-v1/child-stack.lock.json`]).stdout));
+  const briefBytes = await readFile(join(repositoryRoot, "conformance/poiesis-v1/birth-brief.md")); const policyBytes = await readFile(join(repositoryRoot, "conformance/poiesis-v1/birth-workspace-policy.json")); assert.equal(digest(briefBytes), lock.birthBriefSha256); assert.equal(digest(Buffer.from(canonical(JSON.parse(policyBytes)))), lock.birthPolicySha256);
+  const evidencePaths = ["conformance/poiesis-v1/scaffold.lock.json", "conformance/poiesis-v1/birth-brief.md", "conformance/poiesis-v1/birth-workspace-policy.json"]; const commits = new Set();
+  for (const path of evidencePaths) { const values = command(["log", "--diff-filter=A", "--format=%H", "--", path]).stdout.toString("utf8").trim().split("\n").filter(Boolean); assert.equal(values.length, 1); commits.add(values[0]); }
+  assert.equal(commits.size, 1); const evidenceCommit = [...commits][0]; assert.equal(command(["rev-parse", `${evidenceCommit}^`]).stdout.toString("utf8").trim(), lock.baselineCommit);
+  return digest(lockBytes);
+}
+
+const scaffoldDigest = await verifyScaffoldLock();
+process.stdout.write(`parent_lock_sha256=${digest(await readFile(parentPath))}\nchild_stack_lock_sha256=${digest(await readFile(childPath))}\n${scaffoldDigest ? `scaffold_lock_sha256=${scaffoldDigest}\n` : ""}locks=true\n`);
