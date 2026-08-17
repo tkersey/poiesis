@@ -238,8 +238,9 @@ async function runDeterministic(options = {}, callbacks = {}) {
 
 async function proveRetry(options) {
   const fault = { armed: false, childBytes: null }; let environment; let parentBytes; let invocations; let mutations; let interrupted = false;
+  const internalRoot = options.runRoot ?? join(repositoryRoot, ".poiesis/child-runs/poiesis-v1-retry");
   try {
-    await runDeterministic({ ...options, receipt: join(options.runRoot ?? join(repositoryRoot, ".poiesis/child-runs/retry"), "unused.json") }, { onEnvironment: (value) => { environment = value; }, beforeEffectAdvance: async ({ transition, event, context }) => { if (event.interfaceLabel === "repo.replace.approved.v2" && event.applied && (context.mutationCount ?? 0) === 1) { fault.armed = true; parentBytes = Buffer.from(transition.frameBytes); invocations = context.workspaceAdapterInvocations; mutations = context.mutationCount; } }, faultInjector: async (phase, details) => { if (fault.armed && phase === "after-world-step") { fault.armed = false; fault.childBytes = Buffer.from(details.output.frameBytes); throw new Error("simulated_lost_output"); } } });
+    await runDeterministic({ ...options, runRoot: internalRoot, receipt: join(internalRoot, "unused.json") }, { onEnvironment: (value) => { environment = value; }, beforeEffectAdvance: async ({ transition, event, context }) => { if (event.interfaceLabel === "repo.replace.approved.v2" && event.applied && (context.mutationCount ?? 0) === 1) { fault.armed = true; parentBytes = Buffer.from(transition.frameBytes); invocations = context.workspaceAdapterInvocations; mutations = context.mutationCount; } }, faultInjector: async (phase, details) => { if (fault.armed && phase === "after-world-step") { fault.armed = false; fault.childBytes = Buffer.from(details.output.frameBytes); throw new Error("simulated_lost_output"); } } });
   } catch (error) { interrupted = error?.message === "simulated_lost_output"; if (!interrupted) throw error; }
   assert.ok(interrupted && environment && fault.childBytes && parentBytes);
   const retained = await environment.controller.advance(environment.runId, environment.branchId); assert.ok(Buffer.from(retained.frameBytes).equals(fault.childBytes)); assert.equal(environment.context.workspaceAdapterInvocations, invocations); assert.equal(environment.context.mutationCount, mutations);
@@ -248,7 +249,8 @@ async function proveRetry(options) {
 }
 
 async function proveReplay(options) {
-  const recorded = await runDeterministic({ ...options, receipt: options.receipt ? `${options.receipt}.recorded` : join(repositoryRoot, ".poiesis/child-runs/replay-recorded.json") });
+  const internalRoot = options.runRoot ?? join(repositoryRoot, ".poiesis/child-runs/poiesis-v1-replay-recorded");
+  const recorded = await runDeterministic({ ...options, runRoot: internalRoot, receipt: join(internalRoot, "recorded.json") });
   const host = recorded.host; let workers = 0; const controller = await host.RunControllerV1.create({ wasmBytes: recorded.wasmBytes, blockStore: new host.MemoryBlockStore(), headStore: new host.MemoryBranchHeadStore(), workerFactory: () => { workers += 1; return new host.ApplicationWorker({ maximumMemoryBytes: 256 * 1024 * 1024 }); }, preflight: async () => ({ blockers: [] }) });
   let current = await controller.initialize("replay", "main", { initialArgsBytes: recorded.args }); let resultIndex = 0; let steps = 1;
   while (current.frame.status !== host.FrameStatus.completed) {
@@ -266,7 +268,8 @@ export function measurementGates(measurements) {
 }
 
 async function proveMeasure(options) {
-  const proof = await runDeterministic({ ...options, receipt: options.receipt ? `${options.receipt}.deterministic` : join(repositoryRoot, ".poiesis/child-runs/measure-deterministic.json") });
+  const internalRoot = options.runRoot ?? join(repositoryRoot, ".poiesis/child-runs/poiesis-v1-measure-deterministic");
+  const proof = await runDeterministic({ ...options, runRoot: internalRoot, receipt: join(internalRoot, "deterministic.json") });
   const measurements = { ...proof.trace.measurements, applicationStateLimitBytes: 512 * 1024, wasmStackBytes: 128 * 1024 * 1024, wasmMemoryBytes: 256 * 1024 * 1024, externalEffectCount: proof.receipt.external_effect_count, modelEffectCount: proof.receipt.model_effect_count, mutationCount: proof.receipt.mutation_count, changedFileCount: proof.receipt.changed_paths.length };
   const gates = measurementGates(measurements); assert.ok(Object.values(gates).every(Boolean)); const receipt = { poiesis_format: 1, mode: "measure", application_id: proof.bindingManifest.applicationId, application_wasm_sha256: sha256(proof.wasmBytes), measurements, gates };
   await writeReceipt(options.receipt ?? join(receiptsRoot, "child.measure.json"), receipt); return { receipt };
