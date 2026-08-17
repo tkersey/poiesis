@@ -119,7 +119,7 @@ pub fn build(b: *std.Build) void {
     wasm.max_memory = @as(u64, 4096) * 64 * 1024;
 
     const pack_wasm = b.addSystemCommand(&.{"node"});
-    pack_wasm.addFileArg(wasm_agent_dependency.path("tools/adequacy/sparse-wasm-data.mjs"));
+    pack_wasm.addFileArg(b.path("tools/sparse-wasm-data.mjs"));
     pack_wasm.addFileArg(wasm.getEmittedBin());
     const packed_wasm = pack_wasm.addOutputFileArg("release-steward.world.wasm");
 
