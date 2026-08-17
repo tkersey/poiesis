@@ -7,7 +7,7 @@ const defaultTag = "poiesis-v1-scaffold";
 const writablePaths = Object.freeze(["src/generated_definition.zig", "src/generated_epistemics.zig", "src/generated_policy.zig", "test/generated_semantics.zig"]);
 const requiredImmutablePaths = Object.freeze([
   ".github/workflows/check.yml", "LICENSE", "README.md", "build.zig", "build.zig.zon", "package.json",
-  "scaffold/application.zig", "scaffold/emit_binding_manifest.zig", "scaffold/emit_codec_vectors.zig", "scaffold/emit_decision_contract.zig", "scaffold/emit_initial_args.zig", "scaffold/release_contract.zig", "scaffold/wasm_main.zig", "scaffold/working_set_helpers.zig",
+  "scaffold/agent_epistemics_guide.md", "scaffold/application.zig", "scaffold/emit_binding_manifest.zig", "scaffold/emit_codec_vectors.zig", "scaffold/emit_decision_contract.zig", "scaffold/emit_initial_args.zig", "scaffold/release_contract.zig", "scaffold/wasm_main.zig", "scaffold/working_set_helpers.zig",
   "scaffold/runtime/bindings.mjs", "scaffold/runtime/codecs.mjs", "scaffold/runtime/openai-adapter.mjs", "scaffold/runtime/workspace-adapter.mjs",
   "tools/acquire-parent.mjs", "tools/build-release.mjs", "tools/check-artifacts.mjs", "tools/check-lock.mjs", "tools/freeze-child.mjs", "tools/publish-birth.mjs", "tools/publish-child.mjs", "tools/run-birth.mjs", "tools/run-child.mjs", "tools/sparse-wasm-data.mjs", "tools/verify-birth.mjs", "tools/verify-child.mjs", "tools/verify-lineage.mjs", "tools/verify-parent.mjs",
 ]);

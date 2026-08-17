@@ -9,7 +9,7 @@ Author the complete application-specific semantics of the Agent Poiesis v1 Relea
 
 Replace them in that order unless a full check requires revising an earlier replacement. Replace `test/generated_semantics.zig` last, set its public `generated` declaration to true, and stop only after `zig build check --summary all` passes with every generated-only hidden test active. Run that exact complete check after every replacement. At most six applied replacements and four distinct changed files are available; each completed file must remain valid UTF-8 and no larger than 16 KiB.
 
-Inspect the immutable release contract, working-set helpers, application closure, build graph, current stubs, visible test interface, hidden-test descriptions, binding manifest emitter, codec-vector emitter, and runtime codecs before authoring. Author ordinary Zig only. Do not emit Boundary Control IR, RNF, Machine state, Frame bytes, WebAssembly bytes, generated reducer source, serialized runtime definitions, callbacks, host paths, credentials, endpoints, commands, or a reference patch.
+Inspect the immutable release contract, Agent v2.6 epistemics surface guide, working-set helpers, and all four current stubs before authoring. The birth brief below contains the hidden-test laws; the fixed full check is the only build-graph oracle. Author ordinary Zig only. Do not emit Boundary Control IR, RNF, Machine state, Frame bytes, WebAssembly bytes, generated reducer source, serialized runtime definitions, callbacks, host paths, credentials, endpoints, commands, or a reference patch.
 
 ## Policy
 

@@ -1,0 +1,19 @@
+{
+  "format": "poiesis-obstruction/v1",
+  "owner": "capability_obstruction",
+  "component": "poiesis immutable scaffold",
+  "scaffold_commit": "3f712479ae001423024931365072707467878e24",
+  "scaffold_tag": "poiesis-v1-scaffold-r1",
+  "result": "failed",
+  "failure": "partial replacements violate stub identity checks and required Agent API is absent from the readable surface",
+  "failed_live_receipt_sha256": "8996b92f1833cd397bb5fb83845e3fa0fef9f17810b62613c8e8266ff0ec5367",
+  "terminal_failure": "Boundary Machine execution budget exceeded",
+  "search_observations": {
+    "epistemic_strategy_zero_hit_searches": 20,
+    "approved_replacements": 1
+  },
+  "smallest_correction": "permit non-empty partial identities and expose a generic Agent v2.6 custom epistemics guide",
+  "parent_changed": false,
+  "child_stack_changed": false,
+  "abi_changed": false
+}
