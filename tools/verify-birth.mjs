@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
-import { lstat, mkdir, readFile, readdir, realpath, writeFile } from "node:fs/promises";
+import { lstat, mkdir, mkdtemp, readFile, readdir, realpath, writeFile } from "node:fs/promises";
 import { dirname, isAbsolute, join, resolve } from "node:path";
 import { _birthInternals } from "./run-birth.mjs";
 
@@ -41,7 +41,7 @@ export function assertBirthChangedPaths(paths) {
 export function buildVerificationRecord(value) {
   assertBirthChangedPaths(value.changedPaths);
   assert.deepEqual(Object.keys(value.fileDigests).sort(), expectedChangedPaths);
-  for (const digest of [...Object.values(value.fileDigests), value.diffSha256, value.zigOutputSha256, value.bunOutputSha256, value.artifactOutputSha256]) assert.match(digest, /^[0-9a-f]{64}$/);
+  for (const digest of [...Object.values(value.fileDigests), value.diffSha256]) assert.match(digest, /^[0-9a-f]{64}$/);
   return Object.freeze({
     format: "poiesis-birth-verification/v1",
     parent_candidate_commit: value.parentCandidateCommit,
@@ -51,9 +51,9 @@ export function buildVerificationRecord(value) {
     changed_paths: [...value.changedPaths],
     terminal_file_digests: { ...value.fileDigests },
     final_diff_sha256: value.diffSha256,
-    zig_check_output_sha256: value.zigOutputSha256,
-    bun_check_output_sha256: value.bunOutputSha256,
-    artifact_check_output_sha256: value.artifactOutputSha256,
+    zig_check_argv: ["zig-0.16.0", "build", "check", "--summary", "all"],
+    bun_test_files: [...value.bunTestFiles],
+    artifact_check_argv: ["bun", "tools/check-artifacts.mjs", "--expect", "generated"],
     generated_semantics: true,
     full_check_passed: true,
     hidden_native_wasm_tests_passed: true,
@@ -110,7 +110,7 @@ export async function verifyBirth(options) {
   const repositoryRoot = await realpath(options.repositoryRoot);
   const canonicalReceipt = join(repositoryRoot, "conformance/poiesis-v1/receipts/birth.live.redacted.json");
   assert.equal(options.receipt, canonicalReceipt, "birth receipt path mismatch");
-  const parentVerifyHome = join(options.store, "parent-verify-home"); await mkdir(parentVerifyHome, { recursive: false, mode: 0o700 });
+  const parentVerifyHome = await mkdtemp(join(options.store, "parent-verify-home-"));
   command(process.execPath, [join(repositoryRoot, "tools/verify-parent.mjs")], { cwd: repositoryRoot, env: fixedEnvironment(parentVerifyHome, options.zigExecutable) });
   const [receipt, scaffoldLock] = await Promise.all([
     json(options.receipt),
@@ -136,14 +136,14 @@ export async function verifyBirth(options) {
   }
   const diff = command("git", ["diff", "--binary", "--no-ext-diff", "--full-index", scaffoldLock.baselineCommit, "--", ...changedPaths], { cwd: worktree }).stdout;
   assert.equal(sha256(diff), receipt.final_diff_sha256, "birth diff digest mismatch");
-  const verifyHome = join(options.store, "birth-independent-home"); await mkdir(verifyHome, { recursive: false, mode: 0o700 });
+  const verifyHome = await mkdtemp(join(options.store, "birth-independent-home-"));
   const environment = fixedEnvironment(verifyHome, options.zigExecutable);
   const zigResult = command(options.zigExecutable, ["build", "check", "--summary", "all"], { cwd: worktree, env: environment });
   const zigOutput = Buffer.concat([zigResult.stdout, zigResult.stderr]);
   assert.equal(/\bskipped\b/.test(zigOutput.toString("utf8")), false, "generated hidden tests were skipped");
   const testFiles = (await readdir(join(worktree, "scaffold/test"))).filter((name) => name.endsWith(".test.mjs")).sort().map((name) => `scaffold/test/${name}`);
-  const bunResult = command(process.execPath, ["test", ...testFiles], { cwd: worktree, env: environment });
-  const artifactResult = command(process.execPath, ["tools/check-artifacts.mjs", "--repository-root", worktree, "--artifacts", join(worktree, "zig-out/release-steward"), "--expect", "generated"], { cwd: worktree, env: environment });
+  command(process.execPath, ["test", ...testFiles], { cwd: worktree, env: environment });
+  command(process.execPath, ["tools/check-artifacts.mjs", "--repository-root", worktree, "--artifacts", join(worktree, "zig-out/release-steward"), "--expect", "generated"], { cwd: worktree, env: environment });
   assertBirthChangedPaths(command("git", ["diff", "--name-only", scaffoldLock.baselineCommit, "--"], { cwd: worktree }).stdout.toString("utf8").trim().split("\n").filter(Boolean));
   const record = buildVerificationRecord({
     parentCandidateCommit: receipt.parent_candidate_commit,
@@ -153,13 +153,14 @@ export async function verifyBirth(options) {
     changedPaths,
     fileDigests,
     diffSha256: receipt.final_diff_sha256,
-    zigOutputSha256: sha256(zigOutput),
-    bunOutputSha256: sha256(Buffer.concat([bunResult.stdout, bunResult.stderr])),
-    artifactOutputSha256: sha256(Buffer.concat([artifactResult.stdout, artifactResult.stderr])),
+    bunTestFiles: testFiles,
   });
   const verificationPath = join(options.store, "birth.verification.json");
   const bytes = Buffer.from(`${JSON.stringify(record, null, 2)}\n`);
-  await writeFile(verificationPath, bytes, { flag: "wx", mode: 0o600 });
+  try { await writeFile(verificationPath, bytes, { flag: "wx", mode: 0o600 }); }
+  catch (error) {
+    if (error?.code !== "EEXIST" || !Buffer.from(await readFile(verificationPath)).equals(bytes)) throw error;
+  }
   return Object.freeze({ record, verificationPath, verificationDigest: sha256(bytes), worktree });
 }
 
