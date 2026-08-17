@@ -1,0 +1,21 @@
+{
+  "format": "poiesis-obstruction/v1",
+  "classification": "capability_obstruction",
+  "owner": "Poiesis scaffold-freeze tooling",
+  "status": "witnessed",
+  "original_tuple_passed": false,
+  "obstruction": "A Git commit cannot be ordinarily constructed while containing both its own commit SHA and the digest of a policy whose baseRevision is that same SHA.",
+  "smallest_change": "Tag immutable scaffold commit A, then add lock, brief, and policy evidence in first-child commit B while every birth target remains A.",
+  "changed_surfaces": {
+    "parent_application": false,
+    "child_source": false,
+    "machine_abi": false,
+    "machine_state": false,
+    "application_abi": false,
+    "frame": false,
+    "host_behavior": false,
+    "effect_protocol": false,
+    "scaffold_evidence_commit_order": true
+  },
+  "reproducer": "reproducer/verify.mjs"
+}
