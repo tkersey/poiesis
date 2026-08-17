@@ -8,7 +8,9 @@ describe("two-layer scaffold freeze", () => {
   });
 
   test("admits only tag and evidence phases", () => {
-    expect(_freezeScaffoldInternals.parseArgs(["--repository-root", "/repo", "--phase", "tag"])).toEqual({ repositoryRoot: "/repo", phase: "tag" });
+    expect(_freezeScaffoldInternals.parseArgs(["--repository-root", "/repo", "--phase", "tag"])).toEqual({ repositoryRoot: "/repo", phase: "tag", tag: "poiesis-v1-scaffold" });
+    expect(_freezeScaffoldInternals.parseArgs(["--repository-root", "/repo", "--phase", "tag", "--tag", "poiesis-v1-scaffold-r1"])).toEqual({ repositoryRoot: "/repo", phase: "tag", tag: "poiesis-v1-scaffold-r1" });
+    expect(() => _freezeScaffoldInternals.parseArgs(["--repository-root", "/repo", "--phase", "tag", "--tag", "poiesis-v1-scaffold-next"])).toThrow();
     expect(() => _freezeScaffoldInternals.parseArgs(["--repository-root", "/repo", "--phase", "unknown"])).toThrow();
   });
 });

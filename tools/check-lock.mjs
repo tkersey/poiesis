@@ -77,7 +77,8 @@ function canonical(value) { if (value === null || typeof value !== "object") ret
 async function verifyScaffoldLock() {
   try { await lstat(scaffoldPath); } catch (error) { if (error?.code === "ENOENT") return null; throw error; }
   const lockBytes = await readFile(scaffoldPath); const lock = JSON.parse(lockBytes); assert.equal(lock.format, "poiesis-scaffold-lock/v1");
-  assert.equal(command(["rev-parse", "poiesis-v1-scaffold^{commit}"]).stdout.toString("utf8").trim(), lock.baselineCommit);
+  const baselineTag = lock.baselineTag ?? "poiesis-v1-scaffold"; assert.match(baselineTag, /^poiesis-v1-scaffold(?:-r[1-9][0-9]*)?$/);
+  assert.equal(command(["rev-parse", `${baselineTag}^{commit}`]).stdout.toString("utf8").trim(), lock.baselineCommit);
   assert.equal(digest(command(["ls-tree", "-r", "-z", lock.baselineCommit]).stdout), lock.treeSha256);
   const tracked = command(["ls-tree", "-r", "--name-only", lock.baselineCommit]).stdout.toString("utf8").trim().split("\n").filter(Boolean).sort();
   const classified = [...Object.keys(lock.immutableFiles), ...Object.keys(lock.writableStubs)].sort(); assert.deepEqual(classified, tracked);
@@ -85,9 +86,11 @@ async function verifyScaffoldLock() {
   for (const [path, expected] of Object.entries(lock.writableStubs)) { const bytes = command(["show", `${lock.baselineCommit}:${path}`]).stdout; assert.equal(digest(bytes), expected.sha256); assert.equal(command(["rev-parse", `${lock.baselineCommit}:${path}`]).stdout.toString("utf8").trim(), expected.git_blob_oid); assert.ok(bytes.length <= expected.maximum_bytes); }
   assert.equal(lock.parentLockSha256, digest(command(["show", `${lock.baselineCommit}:conformance/poiesis-v1/parent.lock.json`]).stdout)); assert.equal(lock.childStackLockSha256, digest(command(["show", `${lock.baselineCommit}:conformance/poiesis-v1/child-stack.lock.json`]).stdout));
   const briefBytes = await readFile(join(repositoryRoot, "conformance/poiesis-v1/birth-brief.md")); const policyBytes = await readFile(join(repositoryRoot, "conformance/poiesis-v1/birth-workspace-policy.json")); assert.equal(digest(briefBytes), lock.birthBriefSha256); assert.equal(digest(Buffer.from(canonical(JSON.parse(policyBytes)))), lock.birthPolicySha256);
-  const evidencePaths = ["conformance/poiesis-v1/scaffold.lock.json", "conformance/poiesis-v1/birth-brief.md", "conformance/poiesis-v1/birth-workspace-policy.json"]; const commits = new Set();
-  for (const path of evidencePaths) { const values = command(["log", "--diff-filter=A", "--format=%H", "--", path]).stdout.toString("utf8").trim().split("\n").filter(Boolean); assert.equal(values.length, 1); commits.add(values[0]); }
+  const briefAtBaseline = command(["cat-file", "-e", `${lock.baselineCommit}:conformance/poiesis-v1/birth-brief.md`], true).status === 0; const policyAtBaseline = command(["cat-file", "-e", `${lock.baselineCommit}:conformance/poiesis-v1/birth-workspace-policy.json`], true).status === 0;
+  const evidencePaths = ["conformance/poiesis-v1/scaffold.lock.json"]; if (!briefAtBaseline) evidencePaths.push("conformance/poiesis-v1/birth-brief.md"); if (!policyAtBaseline) evidencePaths.push("conformance/poiesis-v1/birth-workspace-policy.json");
+  const commits = new Set(); for (const path of evidencePaths) { const value = command(["log", "-1", "--format=%H", "--", path]).stdout.toString("utf8").trim(); assert.match(value, /^[0-9a-f]{40}$/); commits.add(value); }
   assert.equal(commits.size, 1); const evidenceCommit = [...commits][0]; assert.equal(command(["rev-parse", `${evidenceCommit}^`]).stdout.toString("utf8").trim(), lock.baselineCommit);
+  if (briefAtBaseline) assert.equal(digest(command(["show", `${lock.baselineCommit}:conformance/poiesis-v1/birth-brief.md`]).stdout), lock.birthBriefSha256); if (policyAtBaseline) assert.equal(digest(Buffer.from(canonical(JSON.parse(command(["show", `${lock.baselineCommit}:conformance/poiesis-v1/birth-workspace-policy.json`]).stdout)))), lock.birthPolicySha256);
   return digest(lockBytes);
 }
 

@@ -1,0 +1,35 @@
+{
+  "format": "poiesis-obstruction/v1",
+  "owner": "capability_obstruction",
+  "component": "poiesis immutable scaffold",
+  "original_scaffold_commit": "3bf31e1b86a0e3aaa1fd5e06ba803ab5aa5965fa",
+  "original_scaffold_tag": "poiesis-v1-scaffold",
+  "result": "failed",
+  "failure": "immutable hidden baseline predicate contradicts required generated mode",
+  "failed_live_receipts": [
+    {
+      "sha256": "3ef39ef59965a7d1a2f935cd5baae6ff3cb48e71f7f6aa80538733290fe4950a",
+      "failure_class": "fuel stall after 14502-byte build.zig read"
+    },
+    {
+      "sha256": "301d8947424628375aa4d70ba313cbc7b3b8b4eefb0436d796c206b332097791",
+      "failure_class": "capacity_exceeded after eleventh distinct document"
+    },
+    {
+      "sha256": "4655456dfdefca8a57c4db1b85ece4cd455d70ae27db724ef48fb71810bb95ee",
+      "failure_class": "fuel stall folding post-check search observation"
+    },
+    {
+      "sha256": "9cd5dbf0388d6ba4a3ca00ce438a57466fb3a372a2e1cc7d35310fc4f453cf9f",
+      "failure_class": "authored_abort after two checked policy replacements"
+    },
+    {
+      "sha256": "022093fcd732e8f9436ab0e5922c25421cc3a2c4cf7e1b0d206b3a91c1acd457",
+      "failure_class": "authored_abort after two checked policy replacements"
+    }
+  ],
+  "smallest_correction": "skip the baseline-only hidden assertion when generated is true",
+  "parent_changed": false,
+  "child_stack_changed": false,
+  "abi_changed": false
+}

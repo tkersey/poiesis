@@ -142,6 +142,14 @@ export function birthReceiptFromParent(parent, context) {
   });
 }
 
+export async function prepareBirthStore(store) {
+  await mkdir(store, { recursive: false, mode: 0o700 });
+  await Promise.all([
+    mkdir(join(store, "operator-home"), { recursive: false, mode: 0o700 }),
+    mkdir(join(store, "runs"), { recursive: false, mode: 0o700 }),
+  ]);
+}
+
 export async function runBirth(options) {
   if (!process.env.OPENAI_API_KEY || !process.env.OPENAI_MODEL) throw new Error("OPENAI_API_KEY and OPENAI_MODEL are required");
   const repositoryRoot = await realpath(options.repositoryRoot);
@@ -169,8 +177,7 @@ export async function runBirth(options) {
   assert.deepEqual(rawPolicy.writablePaths, expectedChangedPaths);
   assert.equal(command(options.zigExecutable, ["version"]).toString("utf8").trim(), "0.16.0");
 
-  await mkdir(options.store, { recursive: false, mode: 0o700 });
-  await mkdir(join(options.store, "operator-home"), { recursive: false, mode: 0o700 });
+  await prepareBirthStore(options.store);
   const environment = sanitizedEnvironment(options.store, options.zigExecutable);
   command(process.execPath, [join(repositoryRoot, "tools/verify-parent.mjs")], { cwd: repositoryRoot, env: environment });
   const parentRunner = join(repositoryRoot, ".poiesis/parent/runner");

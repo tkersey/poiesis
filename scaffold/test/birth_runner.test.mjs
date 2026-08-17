@@ -1,5 +1,8 @@
 import { describe, expect, test } from "bun:test";
-import { birthReceiptFromParent, _birthInternals } from "../../tools/run-birth.mjs";
+import { mkdtemp, rm, stat } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { birthReceiptFromParent, prepareBirthStore, _birthInternals } from "../../tools/run-birth.mjs";
 
 const candidate = { praxisCommit: "1".repeat(40), applicationId: "a".repeat(64), applicationWasmSha256: "b".repeat(64) };
 const parent = {
@@ -33,5 +36,17 @@ describe("controlled birth runner", () => {
     expect(parsed).toMatchObject({ repositoryRoot: "/repo", zigExecutable: "/zig", store: "/store" });
     expect(() => _birthInternals.parseArgs(["--repository-root", "/repo"])).toThrow();
     expect(() => _birthInternals.parseArgs(["--repository-root", "/repo", "--repository-root", "/other", "--base-revision", "0".repeat(40), "--zig", "/zig", "--store", "/store", "--receipt", "receipt.json"])).toThrow();
+  });
+
+  test("creates the parent runner store boundary before invocation", async () => {
+    const parent = await mkdtemp(join(tmpdir(), "poiesis-birth-test-"));
+    const store = join(parent, "store");
+    try {
+      await prepareBirthStore(store);
+      expect((await stat(join(store, "operator-home"))).isDirectory()).toBe(true);
+      expect((await stat(join(store, "runs"))).isDirectory()).toBe(true);
+    } finally {
+      await rm(parent, { recursive: true, force: true });
+    }
   });
 });
