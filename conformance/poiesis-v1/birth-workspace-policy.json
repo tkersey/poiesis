@@ -1,0 +1,61 @@
+{
+  "format": "praxis-workspace-policy/v1",
+  "repository": "tkersey/poiesis",
+  "baseRevision": "3bf31e1b86a0e3aaa1fd5e06ba803ab5aa5965fa",
+  "readablePaths": [
+    ".gitattributes",
+    ".github/workflows/check.yml",
+    ".gitignore",
+    "LICENSE",
+    "README.md",
+    "build.zig",
+    "build.zig.zon",
+    "package.json",
+    "scaffold/application.zig",
+    "scaffold/emit_binding_manifest.zig",
+    "scaffold/emit_codec_vectors.zig",
+    "scaffold/emit_decision_contract.zig",
+    "scaffold/emit_initial_args.zig",
+    "scaffold/release_contract.zig",
+    "scaffold/runtime/bindings.mjs",
+    "scaffold/runtime/codecs.mjs",
+    "scaffold/runtime/non-claims.md",
+    "scaffold/runtime/openai-adapter.mjs",
+    "scaffold/runtime/workspace-adapter.mjs",
+    "scaffold/test/all.test.mjs",
+    "scaffold/test/codec_parity.mjs",
+    "scaffold/test/hidden_action_admission.zig",
+    "scaffold/test/hidden_child_contract.zig",
+    "scaffold/test/hidden_final_admission.zig",
+    "scaffold/test/runtime.mjs",
+    "scaffold/wasm_main.zig",
+    "scaffold/working_set_helpers.zig",
+    "src/generated_definition.zig",
+    "src/generated_epistemics.zig",
+    "src/generated_policy.zig",
+    "test/generated_semantics.zig",
+    "tools/check-artifacts.mjs",
+    "tools/check-lock.mjs"
+  ],
+  "writablePaths": [
+    "src/generated_definition.zig",
+    "src/generated_epistemics.zig",
+    "src/generated_policy.zig",
+    "test/generated_semantics.zig"
+  ],
+  "check": {
+    "kind": "zig-build-check-v1",
+    "argv": [
+      "build",
+      "check",
+      "--summary",
+      "all"
+    ]
+  },
+  "limits": {
+    "maximumFileBytes": 16384,
+    "maximumListedFiles": 64,
+    "maximumChangedFiles": 4,
+    "maximumMutationOperations": 6
+  }
+}
