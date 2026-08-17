@@ -162,6 +162,23 @@ pub fn build(b: *std.Build) void {
         .basename = "release-steward.binding-manifest.json",
     });
 
+    const codec_vectors = b.addExecutable(.{
+        .name = "emit-release-steward-codec-vectors",
+        .root_module = b.createModule(.{
+            .root_source_file = b.path("scaffold/emit_codec_vectors.zig"),
+            .target = target,
+            .optimize = optimize,
+            .imports = &.{
+                .{ .name = "boundary", .module = agent_dependency.module("boundary") },
+                .{ .name = "release_contract", .module = contract_module },
+            },
+        }),
+    });
+    codec_vectors.stack_size = 1024 * 1024 * 1024;
+    const codec_vectors_output = b.addRunArtifact(codec_vectors).captureStdOut(.{
+        .basename = "release-steward.codec-vectors.json",
+    });
+
     const artifact_check = b.addSystemCommand(&.{"node"});
     artifact_check.addFileArg(wasm_world_dependency.path("scripts/world_application_v1_artifact_check.mjs"));
     artifact_check.addFileArg(packed_wasm);
@@ -177,6 +194,7 @@ pub fn build(b: *std.Build) void {
     const install_contract_json = b.addInstallFile(contract_json_output, "release-steward/release-steward.decision-contract.json");
     const install_contract_binary = b.addInstallFile(contract_binary_output, "release-steward/release-steward.decision-contract.bin");
     const install_binding_manifest = b.addInstallFile(binding_manifest_output, "release-steward/release-steward.binding-manifest.json");
+    const install_codec_vectors = b.addInstallFile(codec_vectors_output, "release-steward/release-steward.codec-vectors.json");
 
     check.dependOn(&artifact_check.step);
     check.dependOn(&install_wasm.step);
@@ -185,6 +203,7 @@ pub fn build(b: *std.Build) void {
     check.dependOn(&install_contract_json.step);
     check.dependOn(&install_contract_binary.step);
     check.dependOn(&install_binding_manifest.step);
+    check.dependOn(&install_codec_vectors.step);
 
     b.getInstallStep().dependOn(&install_wasm.step);
     b.getInstallStep().dependOn(&install_manifest.step);
@@ -192,6 +211,7 @@ pub fn build(b: *std.Build) void {
     b.getInstallStep().dependOn(&install_contract_json.step);
     b.getInstallStep().dependOn(&install_contract_binary.step);
     b.getInstallStep().dependOn(&install_binding_manifest.step);
+    b.getInstallStep().dependOn(&install_codec_vectors.step);
 }
 
 fn addHiddenTest(

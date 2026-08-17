@@ -98,6 +98,24 @@ export function decodeEffectPayload(operation, bytes) { const codec = codecs[ope
 export function encodeEffectResult(operation, value) { const codec = codecs[operation]; if (!codec) throw new RangeError("unknown repository operation"); const w = new Writer(); codec.encodeResult(w, value); return w.finish(); }
 export function decodeEffectResult(operation, bytes) { const codec = codecs[operation]; if (!codec) throw new RangeError("unknown repository operation"); const r = new Reader(bytes); const value = codec.decodeResult(r); r.finish(); return value; }
 
+export function encodeInitialGoal(value) { const w = new Writer(); encodeGoal(w, value); return w.finish(); }
+export function decodeInitialGoal(bytes) { const r = new Reader(bytes); const value = decodeGoal(r); r.finish(); return value; }
+
+const observationVariants = ["list_repository", "read_file", "search_assertion", "run_check", "replace_file"];
+const observationOperations = ["list", "read", "search", "check", "replace"];
+export function encodeObservation(value) {
+  const admitted = exact(value, ["observation", "result"], "Observation");
+  const tag = observationVariants.indexOf(admitted.observation);
+  if (tag < 0) throw new RangeError("unknown Observation tag");
+  const w = new Writer(); w.u32(tag); codecs[observationOperations[tag]].encodeResult(w, admitted.result); return w.finish();
+}
+export function decodeObservation(bytes) {
+  const r = new Reader(bytes); const tag = r.u32();
+  if (tag >= observationVariants.length) throw new RangeError("unknown Observation tag");
+  const value = { observation: observationVariants[tag], result: codecs[observationOperations[tag]].decodeResult(r) };
+  r.finish(); return value;
+}
+
 function encodeFinal(w, value) { const v = exact(value, ["summary", "current_version", "target_version", "changed_files", "checks_passed", "mutation_count", "assertions_satisfied"], "ReleaseResult"); w.text(v.summary, 4 * 1024, "summary"); w.text(v.current_version, 64, "current_version"); w.text(v.target_version, 64, "target_version"); w.vector(v.changed_files, 4, "changed_files", (path) => w.text(path, 256, "changed_file")); w.bool(v.checks_passed); w.u32(v.mutation_count); w.u8(v.assertions_satisfied); }
 const decodeFinalFrom = (r) => ({ summary: r.text(4 * 1024, "summary"), current_version: r.text(64, "current_version"), target_version: r.text(64, "target_version"), changed_files: r.vector(4, "changed_files", () => r.text(256, "changed_file")), checks_passed: r.bool(), mutation_count: r.u32(), assertions_satisfied: r.u8() });
 
