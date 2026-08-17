@@ -1,0 +1,19 @@
+{
+  "format": "poiesis-obstruction/v1",
+  "owner": "parent_application_obstruction",
+  "parent_release": "v1.0.0",
+  "parent_application_id": "a626ea84e285f7125ce6dc434a58e64c8b3f2402d78e7c1f91f5b3385c226439",
+  "parent_application_wasm_sha256": "1a0bddb0ef1d3658a7c9bd7b5b487b12f5beca39469a0118823e786930b48e4a",
+  "scaffold_commit": "3898d7391eceb75cf73cd617d96729f3462fd92d",
+  "failed_live_receipt_sha256": "5cee65cb9261c2312a255e1770017dd0042c66d6d9d35c49a0924b67d9ba3421",
+  "result": "failed",
+  "failure": "ten identical yielded Machine states while folding an admitted replacement result",
+  "replacement_path": "src/generated_epistemics.zig",
+  "replacement_bytes": 6809,
+  "replacement_result_bytes": 7086,
+  "declared_maximum_file_bytes": 16384,
+  "identical_yield_count": 10,
+  "manual_file_edits": 0,
+  "unapproved_writes": 0,
+  "smallest_owner_change": "release a Praxis successor that proves the same replacement-result fold within its compiled lifecycle"
+}
