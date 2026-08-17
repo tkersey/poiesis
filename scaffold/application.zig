@@ -74,7 +74,7 @@ pub const Application = world.application(.{
     .limits = .{
         .maximum_initial_args_bytes = 16 * 1024,
         .maximum_state_bytes = 512 * 1024,
-        .maximum_payload_bytes = 256 * 1024,
+        .maximum_payload_bytes = @as(u32, @intCast(definition.Definition.decision.maximum_request_bytes)),
         .maximum_result_bytes = 64 * 1024,
         .maximum_host_claim_bytes = 16 * 1024,
         .maximum_host_metadata_bytes = 16 * 1024,
@@ -94,6 +94,7 @@ test "application preserves the Poiesis v1 ABI and resource tuple" {
     try std.testing.expectEqual(@as(u32, 2), Compiled.Manifest.boundary_machine_abi);
     try std.testing.expectEqual(@as(u32, 512 * 1024), Application.Limits.maximum_state_bytes);
     try std.testing.expectEqual(@as(u32, 6), Application.Limits.maximum_residual_effects);
+    try std.testing.expectEqual(@as(u32, 272 * 1024), Application.Limits.maximum_payload_bytes);
     try std.testing.expectEqual(@as(u64, 100_000), Application.Limits.maximum_fuel_per_step);
     try std.testing.expectEqual(@as(u32, 48), Application.Limits.maximum_frame_depth);
     try std.testing.expectEqual(@as(u32, 4096), wasm_initial_pages);

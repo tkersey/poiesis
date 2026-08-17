@@ -186,6 +186,23 @@ pub const DecisionView = struct {
     check_count: u32,
 };
 
+const DecisionCounters = struct {
+    turns: u32,
+    decisions: u32,
+    effect_actions: u32,
+    child_actions: u32,
+};
+const DecisionPhase = enum { decide, propose, reflect };
+const DecisionTurnBound = struct {
+    contract_digest: [32]u8,
+    goal: Goal,
+    counters: DecisionCounters,
+    phase: DecisionPhase,
+    context: DecisionView,
+};
+pub const maximum_decision_turn_bytes = boundary.schema.maximumEncodedSize(DecisionTurnBound);
+pub const maximum_decision_payload_bytes = 272 * 1024;
+
 test "release contract preserves the v1 bounds" {
     const std = @import("std");
     try std.testing.expectEqual(@as(usize, 64), maximum_listed_files);
@@ -193,4 +210,6 @@ test "release contract preserves the v1 bounds" {
     try std.testing.expectEqual(@as(usize, 8), maximum_assertions);
     try std.testing.expectEqual(@as(usize, 6), maximum_mutation_operations);
     try std.testing.expectEqual(@as(usize, 4), maximum_changed_files);
+    try std.testing.expectEqual(@as(usize, 270_678), maximum_decision_turn_bytes);
+    try std.testing.expect(maximum_decision_turn_bytes <= maximum_decision_payload_bytes);
 }

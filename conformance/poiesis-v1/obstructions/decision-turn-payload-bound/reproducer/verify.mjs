@@ -1,0 +1,21 @@
+import assert from "node:assert/strict";
+
+const text = (maximum) => 4 + maximum;
+const vector = (maximum, element) => 4 + maximum * element;
+const assertion = text(256) + text(256) + 4;
+const goal = text(8 * 1024) + text(128) + text(64) * 3 + vector(8, assertion);
+const snapshot = text(256) + text(64) + text(16 * 1024);
+const listing = 1 + vector(64, text(256) + 4 + 1);
+const documents = vector(12, snapshot);
+const evidence = vector(8, 1 + 1 + 1 + 4 + 4);
+const check = 1 + 4 + 1 + text(16 * 1024) + 1;
+const applied = text(256) + text(64) * 2 + 1 + snapshot;
+const replacement = 1 + 4 + applied;
+const mutations = vector(6, text(256) + text(64) * 2 + 1);
+const memory = text(64) * 2 + vector(8, assertion) + listing + documents + evidence + check + replacement + mutations + 1 + 1 + 4 + 4 + 4;
+const turn = 32 + goal + 16 + 4 + memory;
+assert.equal(memory, 257_898);
+assert.equal(turn, 270_678);
+assert.ok(turn > 256 * 1024);
+assert.ok(turn <= 272 * 1024);
+process.stdout.write(`${JSON.stringify({ format: "poiesis-obstruction-reproducer/v1", memory, turn, obstruction: true })}\n`);

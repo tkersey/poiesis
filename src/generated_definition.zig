@@ -16,7 +16,7 @@ pub const Definition = agent.define(.{
     .Failure = contract.Failure,
     .decision = .{
         .interface = "model.decide.v1",
-        .maximum_request_bytes = 256 * 1024,
+        .maximum_request_bytes = contract.maximum_decision_payload_bytes,
         .maximum_result_bytes = 64 * 1024,
     },
     .actions = .{

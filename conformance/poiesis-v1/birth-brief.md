@@ -56,6 +56,8 @@ Admit final completion only when at least one non-idempotent replacement occurre
 
 `src/generated_definition.zig` must define `release-steward` version `1.0.0`, use `agent.strategy.react`, use the custom generated epistemics, and compile with the required limits. Define exactly one descriptor for every Action variant and exact decision interface `model.decide.v1` with contract bounds.
 
+Use the contract's 272 KiB minimized successor request bound. It is the smallest round KiB ceiling above the exact 270,678-byte maximum DecisionTurn; the original 256 KiB tuple is retained as a failed obstruction.
+
 Use action class `tool` for list, read, assertion search, and full check; `human` for replacement; and custom/default for final and abort. Preserve the immutable effect identities from `release_contract.zig`.
 
 ## Visible proof

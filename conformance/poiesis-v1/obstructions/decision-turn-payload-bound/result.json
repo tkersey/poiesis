@@ -1,0 +1,18 @@
+{
+  "format": "poiesis-obstruction/v1",
+  "owner": "application_closure_obstruction",
+  "component": "poiesis child application profile",
+  "scaffold_commit": "bd69ac011646021c38903c26cfe5b9ed32f7e24c",
+  "scaffold_tag": "poiesis-v1-scaffold-r2",
+  "result": "failed",
+  "failure": "270678-byte DecisionTurn exceeds 262144-byte decision and application payload bounds",
+  "exact_decision_view_maximum_bytes": 257898,
+  "exact_decision_turn_maximum_bytes": 270678,
+  "original_payload_bound_bytes": 262144,
+  "successor_payload_bound_bytes": 278528,
+  "smallest_correction": "raise child decision and application payload ceilings to 272 KiB",
+  "parent_changed": false,
+  "child_stack_changed": false,
+  "application_manifest_changed": true,
+  "abi_changed": false
+}
