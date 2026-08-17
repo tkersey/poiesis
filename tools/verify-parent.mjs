@@ -2,7 +2,14 @@ import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { join, resolve } from "node:path";
+import { pathToFileURL } from "node:url";
 import { acquireParent } from "./acquire-parent.mjs";
+
+for (const name of ["GIT_DIR", "GIT_WORK_TREE", "GIT_INDEX_FILE", "GIT_OBJECT_DIRECTORY", "GIT_ALTERNATE_OBJECT_DIRECTORIES", "GIT_REPLACE_REF_BASE"]) delete process.env[name];
+process.env.GIT_CONFIG_NOSYSTEM = "1";
+process.env.GIT_CONFIG_GLOBAL = "/dev/null";
+process.env.GIT_NO_REPLACE_OBJECTS = "1";
+process.env.GIT_TERMINAL_PROMPT = "0";
 
 const sha256 = (bytes) => createHash("sha256").update(bytes).digest("hex");
 const lock = JSON.parse(await readFile(new URL("../conformance/poiesis-v1/parent.lock.json", import.meta.url), "utf8"));
@@ -74,6 +81,10 @@ const releaseCandidate = {
   measureReceiptSha256: lock.lifecycleReceipts.measure,
 };
 const releaseCandidateBytes = Buffer.from(`${JSON.stringify(releaseCandidate, null, 2)}\n`);
+assert.equal(sha256(await readFile(acquired.roots.candidate)), sha256(releaseCandidateBytes));
+const runnerCandidate = await import(pathToFileURL(join(acquired.roots.runner, "tools/candidate.mjs")).href);
+const verifiedRunnerCandidate = await runnerCandidate.verifyCandidate(acquired.roots.candidate);
+assert.deepEqual(verifiedRunnerCandidate, releaseCandidate);
 
 const zig = Bun.spawnSync(["zig", "version"], { stdout: "pipe", stderr: "pipe" });
 assert.equal(zig.exitCode, 0); assert.equal(new TextDecoder().decode(zig.stdout).trim(), "0.16.0");
@@ -81,3 +92,4 @@ process.stdout.write(`parent_candidate_commit=${candidate.praxisCommit}\n`);
 process.stdout.write(`parent_archived_candidate_commit=${archivedCandidate.praxisCommit}\n`);
 process.stdout.write(`parent_candidate_json_sha256=${sha256(releaseCandidateBytes)}\n`);
 process.stdout.write(`parent_application_id=${candidate.applicationId}\nparent_wasm_sha256=${candidate.applicationWasmSha256}\nparent_verified=true\n`);
+process.stdout.write("parent_runner_verified=true\n");

@@ -1,7 +1,9 @@
 import { createHash } from "node:crypto";
+import { spawnSync } from "node:child_process";
+import { constants } from "node:fs";
 import { gunzipSync } from "node:zlib";
-import { chmod, mkdir, readFile, rename, rm, writeFile } from "node:fs/promises";
-import { basename, join, resolve } from "node:path";
+import { chmod, copyFile, lstat, mkdir, readFile, readdir, rename, rm, writeFile } from "node:fs/promises";
+import { basename, dirname, join, resolve } from "node:path";
 
 const defaultRoot = resolve(".poiesis/parent");
 const sha256 = (bytes) => createHash("sha256").update(bytes).digest("hex");
@@ -73,6 +75,76 @@ async function extract(asset, bytes, extracted) {
   return join(directory, asset.expectedRoot);
 }
 
+function command(executable, args, { cwd, environment }) {
+  const result = spawnSync(executable, args, { cwd, env: environment, encoding: "utf8", maxBuffer: 64 * 1024 * 1024 });
+  if (result.error || result.status !== 0) throw new Error(`${executable} ${args.join(" ")} failed\n${result.error ?? ""}${result.stdout ?? ""}${result.stderr ?? ""}`);
+  return result.stdout.trim();
+}
+
+async function copyTree(source, destination) {
+  const status = await lstat(source);
+  if (status.isSymbolicLink() || (!status.isDirectory() && !status.isFile())) throw new Error(`runner source is not an ordinary file or directory: ${source}`);
+  if (status.isDirectory()) {
+    await mkdir(destination, { recursive: true, mode: status.mode & 0o777 });
+    for (const entry of (await readdir(source)).sort()) await copyTree(join(source, entry), join(destination, entry));
+    return;
+  }
+  await mkdir(dirname(destination), { recursive: true, mode: 0o755 });
+  await copyFile(source, destination, constants.COPYFILE_EXCL);
+  await chmod(destination, status.mode & 0o777);
+  if (sha256(await readFile(destination)) !== sha256(await readFile(source))) throw new Error(`runner copy digest mismatch: ${source}`);
+}
+
+async function materializeRunner(root, lock, roots) {
+  const runner = join(root, "runner");
+  await rm(runner, { recursive: true, force: true });
+  await mkdir(runner, { recursive: true, mode: 0o700 });
+  const gitHome = join(root, "git-home"); await mkdir(gitHome, { recursive: true, mode: 0o700 });
+  const environment = {
+    PATH: process.env.PATH ?? "/usr/bin:/bin",
+    HOME: gitHome,
+    GIT_CONFIG_NOSYSTEM: "1",
+    GIT_CONFIG_GLOBAL: "/dev/null",
+    GIT_NO_REPLACE_OBJECTS: "1",
+    GIT_TERMINAL_PROMPT: "0",
+  };
+  command("git", ["init", "--quiet"], { cwd: runner, environment });
+  const repositoryUrl = `https://github.com/${lock.release.repository}.git`;
+  command("git", ["fetch", "--quiet", "--force", "--no-tags", repositoryUrl, `refs/tags/${lock.release.tag}:refs/tags/${lock.release.tag}`], { cwd: runner, environment });
+  const taggedCommit = command("git", ["rev-parse", `${lock.release.tag}^{commit}`], { cwd: runner, environment });
+  if (taggedCommit !== lock.release.tagCommit) throw new Error("parent release tag commit mismatch");
+  command("git", ["cat-file", "-e", `${lock.release.candidateCommit}^{commit}`], { cwd: runner, environment });
+  command("git", ["update-ref", "refs/heads/release", lock.release.tagCommit], { cwd: runner, environment });
+  command("git", ["symbolic-ref", "HEAD", "refs/heads/release"], { cwd: runner, environment });
+  command("git", ["fsck", "--full", "--strict", "--no-dangling"], { cwd: runner, environment });
+
+  await copyTree(roots["praxis-v1.0.0-runtime.tar.gz"], runner);
+  await copyTree(roots["praxis-v1.0.0-artifacts.tar.gz"], runner);
+  await copyTree(roots.worldHost, join(runner, ".praxis/reference-stack/extracted/worldHost", basename(roots.worldHost)));
+  await copyTree(roots.worldCapabilities, join(runner, ".praxis/reference-stack/extracted/worldCapabilities", basename(roots.worldCapabilities)));
+
+  const referenceStackLockSha256 = sha256(await readFile(join(runner, "conformance/praxis-v1/reference-stack.lock.json")));
+  const candidate = {
+    format: "praxis-candidate/v1",
+    praxisCommit: lock.release.candidateCommit,
+    applicationId: lock.release.applicationId,
+    applicationWasmSha256: lock.release.applicationWasmSha256,
+    decisionContractDigest: lock.release.decisionContractDigest,
+    bindingManifestSha256: lock.release.bindingManifestSha256,
+    workspaceAdapterSha256: lock.release.workspaceAdapterSha256,
+    openaiAdapterSha256: lock.release.openaiAdapterSha256,
+    codecsSha256: lock.release.codecsSha256,
+    referenceStackLockSha256,
+    deterministicReceiptSha256: lock.lifecycleReceipts.deterministic,
+    retryReceiptSha256: lock.lifecycleReceipts.retry,
+    replayReceiptSha256: lock.lifecycleReceipts.replay,
+    measureReceiptSha256: lock.lifecycleReceipts.measure,
+  };
+  const candidatePath = join(runner, "conformance/praxis-v1/candidate.json");
+  await writeFile(candidatePath, `${JSON.stringify(candidate, null, 2)}\n`, { flag: "wx", mode: 0o600 });
+  return { runner, candidatePath };
+}
+
 export async function acquireParent({ root = defaultRoot } = {}) {
   const lock = JSON.parse(await readFile(new URL("../conformance/poiesis-v1/parent.lock.json", import.meta.url), "utf8"));
   const child = JSON.parse(await readFile(new URL("../conformance/poiesis-v1/child-stack.lock.json", import.meta.url), "utf8"));
@@ -91,6 +163,9 @@ export async function acquireParent({ root = defaultRoot } = {}) {
     const asset = { name: basename(expected.url), url: expected.url, sha256: expected.sha256, sizeBytes: name === "worldHost" ? 170017 : 1109607, maximumExpandedBytes: expected.maximumExpandedBytes, expectedRoot: expected.root };
     const acquired = await download(asset, downloads); roots[name] = await extract(asset, acquired.bytes, join(extracted, "reference"));
   }
+  const materialized = await materializeRunner(root, lock, roots);
+  roots.runner = materialized.runner;
+  roots.candidate = materialized.candidatePath;
   return Object.freeze({ root, roots });
 }
 
