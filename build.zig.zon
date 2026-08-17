@@ -1,0 +1,31 @@
+.{
+    .name = .poiesis,
+    .version = "1.0.0",
+    .fingerprint = 0x3bf886b688770755,
+    .dependencies = .{
+        .agent = .{
+            .url = "https://github.com/tkersey/agent/archive/refs/tags/v2.6.0.tar.gz",
+            .hash = "agent-2.6.0-dBg3hIcvDgBabB3wguSWGVL-NNOYoY0Ipgu82cZ-dfVu",
+        },
+        .world = .{
+            .url = "https://github.com/tkersey/world/archive/refs/tags/v3.1.3.tar.gz",
+            .hash = "world-3.1.3-XXTUeKXGBgDDzZ7uarFCYSLwYD8pGNBMNdIYfgIcu23v",
+        },
+    },
+    .minimum_zig_version = "0.16.0",
+    .paths = .{
+        ".github",
+        "LICENSE",
+        "README.md",
+        "build.zig",
+        "build.zig.zon",
+        "conformance",
+        "fixtures",
+        "package.json",
+        "runtime",
+        "scaffold",
+        "src",
+        "test",
+        "tools",
+    },
+}

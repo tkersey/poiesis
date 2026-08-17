@@ -1,0 +1,6 @@
+.DS_Store
+.poiesis/
+.zig-cache/
+node_modules/
+zig-pkg/
+zig-out/
