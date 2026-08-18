@@ -22,25 +22,25 @@ assert.deepEqual(parent.tuple, {
 });
 assert.deepEqual(child.tuple, { ...parent.tuple, agent: "2.6.0" });
 assert.deepEqual(parent.release, {
-  repository: "tkersey/praxis", tag: "v1.0.1", tagCommit: "e2053b271abb6e31fc138b76f2b5a1c643614910",
-  candidateCommit: "e2053b271abb6e31fc138b76f2b5a1c643614910",
-  applicationId: "c4f0223a9a39069d97389ce334986c924099d5890887215e52ce9c4adfdb93eb",
-  applicationWasmSha256: "56f1b80d0b5cec60e11c7097bec2d80c81896be3b65e87a4887728aa29b52278",
-  decisionContractDigest: "4d50e2ac529f99d37b6e2e2a307e0948bb2b589a591123ffef45bc7870cd8822",
-  bindingManifestSha256: "473d9c116dc1d81c43f48c55c7e2a074847af0636a023e757a975c0b46802605",
+  repository: "tkersey/praxis", tag: "v1.0.2", tagCommit: "30fcd4ce87b48bbaa0a96f76b59539c3e7b0c7af",
+  candidateCommit: "30fcd4ce87b48bbaa0a96f76b59539c3e7b0c7af",
+  applicationId: "be897b8ace4a7130a9fb3f8446cb6db1db8d9f73c5c6354bd61d90d327139b20",
+  applicationWasmSha256: "7b2424724a99180ea355f3314ff5113d1efe027db025920a79b7b7ad9552f379",
+  decisionContractDigest: "dbf8a96184aea387b39f8dae0f4d7a51f0231e6a9788f550adeb9815fec2f0db",
+  bindingManifestSha256: "cf3d77589b9e8027b35cb101ab7b39e834dac6f037ba2c1c7a4aa504322c89ac",
   workspaceAdapterSha256: "fa6603233592fe76e1b22ff2bed7c66b6e17ba273450dc06d0b6875d9e08a7a8",
   openaiAdapterSha256: "dd0dca92a4fb04cb059ce6839689aa42ff8a8f6d84664407c59b5ef35b6f69ad",
   codecsSha256: "5354e4e8c14248b7764d8d9431b73f95891f2ec4294afe097ea91b46caffe68c",
 });
 
 assert.deepEqual(parent.assets.map((asset) => asset.name), [
-  "praxis-v1.0.1-artifacts.tar.gz",
-  "praxis-v1.0.1-checksums.txt",
-  "praxis-v1.0.1-runtime.tar.gz",
-  "praxis-v1.0.1-source.tar.gz",
+  "praxis-v1.0.2-artifacts.tar.gz",
+  "praxis-v1.0.2-checksums.txt",
+  "praxis-v1.0.2-runtime.tar.gz",
+  "praxis-v1.0.2-source.tar.gz",
 ]);
 for (const asset of parent.assets) {
-  assert.match(asset.url, /^https:\/\/github\.com\/tkersey\/praxis\/releases\/download\/v1\.0\.1\//);
+  assert.match(asset.url, /^https:\/\/github\.com\/tkersey\/praxis\/releases\/download\/v1\.0\.2\//);
   assert.match(asset.sha256, hex64);
   assert.ok(Number.isSafeInteger(asset.sizeBytes) && asset.sizeBytes > 0);
   assert.ok(Number.isSafeInteger(asset.maximumExpandedBytes) && asset.maximumExpandedBytes >= asset.sizeBytes || asset.expectedRoot === null);

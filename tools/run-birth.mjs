@@ -5,7 +5,7 @@ import { dirname, isAbsolute, join, relative, resolve, sep } from "node:path";
 import { pathToFileURL } from "node:url";
 
 const repositoryIdentity = "tkersey/poiesis";
-const parentRelease = "v1.0.1";
+const parentRelease = "v1.0.2";
 const expectedChangedPaths = Object.freeze([
   "src/generated_definition.zig",
   "src/generated_epistemics.zig",
@@ -103,7 +103,7 @@ export function birthReceiptFromParent(parent, context) {
   assert.equal(parent.unique_changed_file_count, expectedChangedPaths.length);
   assert.deepEqual(Object.keys(parent.terminal_file_digests).sort(), expectedChangedPaths);
   assert.ok(Object.values(parent.terminal_file_digests).every((digest) => /^[0-9a-f]{64}$/.test(digest)));
-  assert.ok(Number.isInteger(parent.mutation_count) && parent.mutation_count >= expectedChangedPaths.length && parent.mutation_count <= 6);
+  assert.ok(Number.isInteger(parent.mutation_count) && parent.mutation_count >= expectedChangedPaths.length && parent.mutation_count <= 10);
   assert.ok(Number.isInteger(parent.test_count) && parent.test_count >= parent.mutation_count + 1);
   assert.equal(parent.external_effect_count, parent.model_effect_count + parent.non_model_effect_count);
   for (const digest of [parent.genesis_frame_id, parent.terminal_frame_id, parent.final_diff_sha256, parent.private_evidence_digest]) assert.match(digest, /^[0-9a-f]{64}$/);

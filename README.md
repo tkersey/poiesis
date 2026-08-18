@@ -3,7 +3,7 @@
 Agent Poiesis is a proof-carrying generative milestone for the released Agent,
 Boundary, and World stack.
 
-Its v1 successor target is one exact event: byte-frozen Praxis v1.0.1 authors the four
+Its v1 successor target is one exact event: byte-frozen Praxis v1.0.2 authors the four
 application-specific semantic source files of a new Release Steward Agent;
 that source compiles into a zero-import World application; only then does the
 receiver select a real release-maintenance task; and the frozen child produces
@@ -17,9 +17,9 @@ conformance records.
 
 ## Fixed stack
 
-- Parent: Praxis v1.0.1 on Agent v2.5.0, with the v1.0.0 obstruction retained
+- Parent: Praxis v1.0.2 on Agent v2.5.0, with prior obstruction tuples retained
 - Child: Agent v2.6.0, Boundary v1.5.0, World v3.1.3
-- Runtime: world-host v1.0.1 and world-capabilities v2.3.2
+- Runtime: world-host v1.0.2 and world-capabilities v2.3.2
 - Compiler: Zig 0.16.0
 - Operator: Bun-compatible JavaScript
 
