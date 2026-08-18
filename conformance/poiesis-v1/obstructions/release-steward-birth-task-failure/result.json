@@ -1,0 +1,20 @@
+{
+  "format": "poiesis-obstruction/v1",
+  "owner": "task_failure",
+  "parent_release": "v1.0.1",
+  "parent_application_id": "c4f0223a9a39069d97389ce334986c924099d5890887215e52ce9c4adfdb93eb",
+  "result": "failed",
+  "terminal_failure": "capacity_exceeded",
+  "failed_live_receipt_sha256": [
+    "c67b864a03f3174ad43ab5bdb7388a7a7c36b0f7b7e27c8447221d77ce8b895e",
+    "9b91101c51cbf3cd7ad100eb92675899ff8956d68a3b781149bcc43fa5f769e9",
+    "0849927825eda4d069e53ce69f5a01d5ef5c27eca29e347753f1305a56bb80e6",
+    "c6e340330d5e1cc4ed858942ae0d32859391b724babad9ba9a7439fc96f3f19a"
+  ],
+  "maximum_replacements": 6,
+  "maximum_distinct_changed_files": 4,
+  "manual_file_edits": 0,
+  "unapproved_writes": 0,
+  "reference_solution_supplied": false,
+  "smallest_next_experiment": "raise only the complete-file replacement budget in a released Praxis successor"
+}
