@@ -11,12 +11,15 @@
     "0849927825eda4d069e53ce69f5a01d5ef5c27eca29e347753f1305a56bb80e6",
     "c6e340330d5e1cc4ed858942ae0d32859391b724babad9ba9a7439fc96f3f19a",
     "8b6ab58a5235844028515352255ad09b218d509ce46b194eb60c3772c922928b",
-    "7a670595cc9bf3dc91c9bae47e0ef193de3799c8106b5777eaed5d2508caba6f"
+    "7a670595cc9bf3dc91c9bae47e0ef193de3799c8106b5777eaed5d2508caba6f",
+    "8399115d80f944c948d4edf25f794a0f007326589d7b6726325c0e2f74fd8ab1",
+    "907e6c6d0969a1db371c8e1b8f197998eba6e07f055ca8937fb925fdb86285b7"
   ],
   "maximum_replacements": 10,
   "maximum_distinct_changed_files": 4,
   "manual_file_edits": 0,
   "unapproved_writes": 0,
   "reference_solution_supplied": false,
-  "smallest_next_experiment": "select a different OPENAI_MODEL under the same frozen Praxis v1.0.4 tuple"
+  "different_model_attempted": true,
+  "smallest_next_experiment": "none without weakening the no-human-code or no-reference-solution claim"
 }

@@ -7,3 +7,5 @@ The final r5 attempt consumed the corrected contract schema tuple and index-firs
 This is a genuine task failure under the admitted six-replacement profile. No manual generated-source edit or hidden implementation was supplied.
 
 After receiver-authorized corrections raised the bounded profile to 10 operations, aligned adapter admission, doubled total Machine fuel, and completed the generic Flow API surface, two Praxis v1.0.4 attempts still returned model-authored `capacity_exceeded` before completion. The remaining blocker is the selected model's ability to author the application within the now-realizable profile.
+
+The receiver then selected a different model without changing parent, scaffold, task, policy, or authority. That attempt also returned typed `capacity_exceeded` before completing a third semantic file. The model-change route is therefore witnessed and failed.
