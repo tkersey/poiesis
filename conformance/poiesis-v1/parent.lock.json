@@ -2,49 +2,49 @@
   "format": "poiesis-parent-lock/v1",
   "release": {
     "repository": "tkersey/praxis",
-    "tag": "v1.0.3",
-    "tagCommit": "f8244fd0f1fde78b3c575c757fee40a77d8f6512",
-    "candidateCommit": "f8244fd0f1fde78b3c575c757fee40a77d8f6512",
-    "applicationId": "4dae2709193ade2593421e44bbb0252745abe0a81cdee766e2b1a608c2569972",
-    "applicationWasmSha256": "4d272318c75d8a6d57f85c1211cc6c7538ba0a94fa75566ee2485a910818d4cf",
-    "decisionContractDigest": "011c1da6023b3ef46112fa4166200e5049ed902008cf158316b9878b44991150",
-    "bindingManifestSha256": "c96ab564af22d9a1263a9c168a3f980bd8ed20ec1dc2cd93fd2d84cb3f279309",
+    "tag": "v1.0.4",
+    "tagCommit": "28f592ce317eb2101958e6119752cc888f60f2f8",
+    "candidateCommit": "28f592ce317eb2101958e6119752cc888f60f2f8",
+    "applicationId": "7e7b7b7bbdc80743b1abf2142becd3ee62e16aeee95e8ad5c90771393d8bf30e",
+    "applicationWasmSha256": "e8848d7ac78fd565f5aa448c59033fdf5343ee2bcb05a2959f0cad9dc6a456d7",
+    "decisionContractDigest": "e2cd75ef38b79be58604b154c4f1feda55f8d82f5122f854aadf322457e07038",
+    "bindingManifestSha256": "b8872ea9f34ddfb72ce3ba41841450d6f774411585acf17fb53197ffd13dbe7e",
     "workspaceAdapterSha256": "86a7dcc062068a418c0f5c4f30180d9dbfa2ec029beeb11695df50edbdfd0872",
     "openaiAdapterSha256": "dd0dca92a4fb04cb059ce6839689aa42ff8a8f6d84664407c59b5ef35b6f69ad",
     "codecsSha256": "5354e4e8c14248b7764d8d9431b73f95891f2ec4294afe097ea91b46caffe68c"
   },
   "assets": [
     {
-      "name": "praxis-v1.0.3-artifacts.tar.gz",
-      "url": "https://github.com/tkersey/praxis/releases/download/v1.0.3/praxis-v1.0.3-artifacts.tar.gz",
-      "sha256": "c43e7771706eb4a29604a130168b6b44a9f437fb54aa24d97c8e049fbc8d19e3",
-      "sizeBytes": 1183876,
+      "name": "praxis-v1.0.4-artifacts.tar.gz",
+      "url": "https://github.com/tkersey/praxis/releases/download/v1.0.4/praxis-v1.0.4-artifacts.tar.gz",
+      "sha256": "869a5db42577bd86a01551a102bb5887408a6b67ccc85b67b79f31753a6111fc",
+      "sizeBytes": 1183880,
       "maximumExpandedBytes": 33554432,
-      "expectedRoot": "praxis-1.0.3-artifacts"
+      "expectedRoot": "praxis-1.0.4-artifacts"
     },
     {
-      "name": "praxis-v1.0.3-checksums.txt",
-      "url": "https://github.com/tkersey/praxis/releases/download/v1.0.3/praxis-v1.0.3-checksums.txt",
-      "sha256": "94d47d802c0a013a9a4c605cc228bab7546648f2d996a03be73ad09f60fbc670",
+      "name": "praxis-v1.0.4-checksums.txt",
+      "url": "https://github.com/tkersey/praxis/releases/download/v1.0.4/praxis-v1.0.4-checksums.txt",
+      "sha256": "e6ed4890e048aefc8a593b3e6fbc0db4f8639f32ca222e6b1ccd35434b9b78bf",
       "sizeBytes": 286,
       "maximumExpandedBytes": 286,
       "expectedRoot": null
     },
     {
-      "name": "praxis-v1.0.3-runtime.tar.gz",
-      "url": "https://github.com/tkersey/praxis/releases/download/v1.0.3/praxis-v1.0.3-runtime.tar.gz",
-      "sha256": "6172704a52b61689a448e66fc8934f37f8ef2e5b4c4fbc134fdd3b96e94c9145",
-      "sizeBytes": 41206,
+      "name": "praxis-v1.0.4-runtime.tar.gz",
+      "url": "https://github.com/tkersey/praxis/releases/download/v1.0.4/praxis-v1.0.4-runtime.tar.gz",
+      "sha256": "df96338cf6502ad8cda2e1b4958b0ed152b413a5e23186c5728fba5c9b5e1e5e",
+      "sizeBytes": 41205,
       "maximumExpandedBytes": 1048576,
-      "expectedRoot": "praxis-1.0.3-runtime"
+      "expectedRoot": "praxis-1.0.4-runtime"
     },
     {
-      "name": "praxis-v1.0.3-source.tar.gz",
-      "url": "https://github.com/tkersey/praxis/releases/download/v1.0.3/praxis-v1.0.3-source.tar.gz",
-      "sha256": "0f008a206a260ea62aeeb67cfc0e42a5a173fd243b578eca3bee0009564a752d",
-      "sizeBytes": 80719,
+      "name": "praxis-v1.0.4-source.tar.gz",
+      "url": "https://github.com/tkersey/praxis/releases/download/v1.0.4/praxis-v1.0.4-source.tar.gz",
+      "sha256": "e493764f01f327d07a4436c4c40b084acce28284ebf4fca953a0aca41cb1c524",
+      "sizeBytes": 81505,
       "maximumExpandedBytes": 1048576,
-      "expectedRoot": "praxis-1.0.3"
+      "expectedRoot": "praxis-1.0.4"
     }
   ],
   "tuple": {
@@ -62,9 +62,9 @@
     "maximumPendingEffects": 1
   },
   "lifecycleReceipts": {
-    "deterministic": "2fc47e3b71db720b31a608902e0101e4a3df38e4d69c1053d80ecc7f44abc00e",
-    "retry": "b0d5b9cc23bc8236ae59b1e2edc2a1249ee40f0e4ab3e174caf5cbdb09de7c82",
-    "replay": "b21f947e4a6be0210b0f1aa739d3d803ecb49bcaf31dadd7e1f4f32fa705823c",
-    "measure": "c2cedffb94099848c1158f7ad09dd2f3b0f34fc0c1297aa4e76ab953363ace9c"
+    "deterministic": "850efd14a875821008a2d97a0968af11128bee2ac117b43c512f3d178b230f38",
+    "retry": "9b8fe246ba584f751b35a979f7df97c4aad5ffd98b1aeb61647a80c20c552c67",
+    "replay": "bb3a4ae2e32a86bd5e0daaefd54d5699311054c0e06137e88769800ea6c37609",
+    "measure": "4c710f136000f1feb50a33f3046bb05f91bb8c92be7ed837eb062283381e580f"
   }
 }

@@ -1,0 +1,11 @@
+{
+  "format": "poiesis-obstruction/v1",
+  "owner": "parent_application_obstruction",
+  "failed_parent_release": "v1.0.3",
+  "failed_live_receipt_sha256": "1bba7fa4921a4d3dbad738e1618cdf09a16c4ac0a4d869de9d82935a9b336957",
+  "failure": "Boundary Machine execution budget exceeded",
+  "effect_count": 42,
+  "failed_total_machine_fuel": 8000000,
+  "successor_total_machine_fuel": 16000000,
+  "successor_parent_release": "v1.0.4"
+}

@@ -28,7 +28,7 @@ export function finalReceipt() {
   return [
     "agent_poiesis_format=1",
     "outcome=generated_child_completed_and_merged_real_task",
-    "parent_release=v1.0.3",
+    "parent_release=v1.0.4",
     "parent_byte_frozen=true",
     "child_source_parent_authored=true",
     "child_semantically_distinct=true",
