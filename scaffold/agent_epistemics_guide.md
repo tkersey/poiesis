@@ -37,6 +37,29 @@ Specialized observation folding may additionally implement `emitObserveKnown` or
 
 Useful effect-free Flow primitives are `copy`, `constant`, `productExtract`, `productConstruct`, `productReplace`, `sumTagIs`, `sumExtract`, `optionalSome`, `optionalNone`, `textCompare`, `compareEqZero`, `integerEqual`, `integerGreaterEqual`, `integerAdd`, `booleanAnd`, `booleanOr`, `booleanNot`, `select`, `block`, `branch`, `jump`, and `enter`. Product and sum indices are compile-time `u16` values and come first: `productExtract(index, product)`, `productReplace(index, product, replacement)`, `sumTagIs(index, sum)`, and `sumExtract(index, sum)`. Use `flow.failValue` only for a typed failure path. Use `flow.block(.segment, .{ ...types... })` to join branch values and `flow.block(.loop_header, .{ ...types... })` for bounded iteration.
 
+Exact call shapes used by generated lowerings:
+
+    constant(T, constant_index)
+    productConstruct(T, .{ field_values... })
+    optionalSome(?T, value)
+    optionalNone(?T)
+    vectorEmpty(VectorType)
+    vectorLength(vector)
+    vectorGet(vector, u32_index)
+    vectorSet(vector, u32_index, element)
+    vectorPush(vector, element)
+    vectorTruncate(vector, u32_length)
+
+A block's type tuple is its parameter list. Every jump or branch edge must pass exactly one argument of the matching type for every declared parameter:
+
+    const yes = flow.block(.segment, .{ contract.Memory, contract.Observation });
+    const no = flow.block(.segment, .{ contract.Memory, contract.Observation });
+    flow.branch(condition, yes, .{ memory, observation }, no, .{ memory, observation });
+    const values = flow.enter(yes); // values[0] is Memory; values[1] is Observation
+    flow.jump(joined, .{ next_memory });
+
+Terminate the current block with `jump`, `branch`, `failValue`, or another terminal operation before calling `enter` on a successor. Do not declare parameters that the incoming edges do not carry.
+
 The standard constant context provides `zero_index`, `one_index`, `initial_memory_index`, `true_index`, `false_index`, `zero_u8_index`, `one_u8_index`, and `two_u8_index`. Supply `constantValues` and `constantContext` only when more portable constants are required.
 
 All emitted lowerings must be effect-free and non-terminal. Every Memory, DecisionView, StateSchemaTypes entry, config value, and constant must remain Boundary-portable.

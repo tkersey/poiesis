@@ -1,0 +1,11 @@
+{
+  "format": "poiesis-obstruction/v1",
+  "owner": "capability_obstruction",
+  "scaffold_tag": "poiesis-v1-scaffold-r8",
+  "result": "failed",
+  "compiler_wounds": [
+    "member function argument count mismatch",
+    "Flow edge argument count differs from target parameters"
+  ],
+  "smallest_correction": "exact generic Flow call and control-edge signatures"
+}
