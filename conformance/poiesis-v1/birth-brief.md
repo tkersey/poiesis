@@ -33,6 +33,8 @@ The instruction text must establish all of these laws:
 
 `src/generated_epistemics.zig` must implement a custom Agent EpistemicStrategy. Its Memory type is `release_contract.Memory`; its DecisionView type is `release_contract.DecisionView`. It must provide deterministic Goal initialization, observation folding, DecisionView projection, typed pre-effect action admission, typed final admission, specialized action admission wherever Agent v2.6.0 permits it, a non-placeholder implementation identity, and sufficient declared lowering complexity. Use Agent Flow only. Do not invoke Boundary directly or encode policy in JavaScript.
 
+Use empty portable custom config. Close over the comptime `agent` and contract parameters in the implementation type, and use the exact tuple signature from the immutable epistemics guide for `StateSchemaTypes`.
+
 Initialize current version, target version, and assertions exactly from Goal. Start with no listing, documents, assertion evidence, check, replacement, or mutations; both check flags false; and all counters zero.
 
 Fold observations as follows:

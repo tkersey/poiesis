@@ -23,6 +23,16 @@ The implementation type needs a non-empty `semantic_identity`, positive `lowerin
     emitActionAllowed(comptime Definition: type, comptime config: anytype, flow: anytype, memory: anytype, action: anytype, comptime context: anytype) agent.Value(bool)
     emitFinalAllowed(comptime Definition: type, comptime config: anytype, flow: anytype, memory: anytype, result: anytype, comptime context: anytype) agent.Value(bool)
 
+When state schema types are a tuple, spell both the return type and value exactly:
+
+    pub fn StateSchemaTypes(comptime _: type, comptime _: anytype)
+        @TypeOf(.{ contract.Memory, contract.DecisionView })
+    {
+        return .{ contract.Memory, contract.DecisionView };
+    }
+
+Keep custom `config` exactly `.config = .{}`. Do not place `agent`, `contract`, types, functions, or other comptime-only values in config: config is a portable runtime product. Close over the `agent` and `contract` comptime parameters in the implementation type returned by `Epistemics` instead.
+
 Specialized observation folding may additionally implement `emitObserveKnown` or `emitObservePayload`; specialized action admission may implement `emitActionAllowedKnown` and `actionAlwaysAllowedKnown`. Specialized action admission still requires the global `emitActionAllowed` fallback.
 
 Useful effect-free Flow primitives are `copy`, `constant`, `productExtract`, `productConstruct`, `productReplace`, `sumTagIs`, `sumExtract`, `optionalSome`, `optionalNone`, `textCompare`, `compareEqZero`, `integerEqual`, `integerLessThan`, `integerAddChecked`, `booleanAnd`, `booleanOr`, `booleanNot`, `select`, `block`, `branch`, `jump`, and `enter`. Use `flow.failValue` only for a typed failure path. Use `flow.block(.segment, .{ ...types... })` to join branch values and `flow.block(.loop_header, .{ ...types... })` for bounded iteration.

@@ -1,0 +1,19 @@
+{
+  "format": "poiesis-obstruction/v1",
+  "owner": "capability_obstruction",
+  "component": "poiesis immutable Agent API guide",
+  "scaffold_tag": "poiesis-v1-scaffold-r3",
+  "result": "failed",
+  "failed_live_receipt_sha256": [
+    "c67b864a03f3174ad43ab5bdb7388a7a7c36b0f7b7e27c8447221d77ce8b895e",
+    "9b91101c51cbf3cd7ad100eb92675899ff8956d68a3b781149bcc43fa5f769e9"
+  ],
+  "compiler_wounds": [
+    "StateSchemaTypes tuple type/value mismatch",
+    "custom config contains comptime fields"
+  ],
+  "smallest_correction": "add exact tuple signature and empty-config closure rule",
+  "parent_changed": false,
+  "child_stack_changed": false,
+  "abi_changed": false
+}
