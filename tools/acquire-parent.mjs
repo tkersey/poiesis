@@ -118,8 +118,11 @@ async function materializeRunner(root, lock, roots) {
   command("git", ["symbolic-ref", "HEAD", "refs/heads/release"], { cwd: runner, environment });
   command("git", ["fsck", "--full", "--strict", "--no-dangling"], { cwd: runner, environment });
 
-  await copyTree(roots["praxis-v1.0.0-runtime.tar.gz"], runner);
-  await copyTree(roots["praxis-v1.0.0-artifacts.tar.gz"], runner);
+  const runtimeAsset = lock.assets.find((asset) => asset.name.endsWith("-runtime.tar.gz"));
+  const artifactsAsset = lock.assets.find((asset) => asset.name.endsWith("-artifacts.tar.gz"));
+  if (!runtimeAsset || !artifactsAsset) throw new Error("parent runtime or artifacts asset is missing");
+  await copyTree(roots[runtimeAsset.name], runner);
+  await copyTree(roots[artifactsAsset.name], runner);
   await copyTree(roots.worldHost, join(runner, ".praxis/reference-stack/extracted/worldHost", basename(roots.worldHost)));
   await copyTree(roots.worldCapabilities, join(runner, ".praxis/reference-stack/extracted/worldCapabilities", basename(roots.worldCapabilities)));
 
@@ -150,12 +153,15 @@ export async function acquireParent({ root = defaultRoot } = {}) {
   const child = JSON.parse(await readFile(new URL("../conformance/poiesis-v1/child-stack.lock.json", import.meta.url), "utf8"));
   const downloads = join(root, "downloads"); const extracted = join(root, "extracted"); await mkdir(extracted, { recursive: true, mode: 0o700 });
   const roots = {};
+  const sourceAsset = lock.assets.find((asset) => asset.name.endsWith("-source.tar.gz"));
+  const runtimeAsset = lock.assets.find((asset) => asset.name.endsWith("-runtime.tar.gz"));
+  if (!sourceAsset || !runtimeAsset) throw new Error("parent source or runtime asset is missing");
   for (const lockedAsset of lock.assets) {
-    const asset = lockedAsset.name === "praxis-v1.0.0-source.tar.gz" ? { ...lockedAsset, allowedPaxComment: lock.release.candidateCommit } : lockedAsset;
+    const asset = lockedAsset.name === sourceAsset.name ? { ...lockedAsset, allowedPaxComment: lock.release.candidateCommit } : lockedAsset;
     const acquired = await download(asset, downloads);
     if (asset.expectedRoot) roots[asset.name] = await extract(asset, acquired.bytes, extracted);
   }
-  const runtimeRoot = roots["praxis-v1.0.0-runtime.tar.gz"];
+  const runtimeRoot = roots[runtimeAsset.name];
   const referenceLock = JSON.parse(await readFile(join(runtimeRoot, "conformance/praxis-v1/reference-stack.lock.json"), "utf8"));
   for (const name of ["worldHost", "worldCapabilities"]) {
     const expected = child.archives[name]; const actual = referenceLock.archives[name];

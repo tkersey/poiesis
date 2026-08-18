@@ -12,7 +12,7 @@ import { verifyCurrent } from "./check-artifacts.mjs";
 const repositoryRoot = resolve(new URL("..", import.meta.url).pathname);
 const artifactsRoot = join(repositoryRoot, "zig-out/release-steward");
 const stackRoot = join(repositoryRoot, ".poiesis/parent/extracted/reference");
-const worldHostRoot = join(stackRoot, "world-host-v1.0.1-runtime/world-host-v1.0.1-runtime");
+const worldHostRoot = join(stackRoot, "world-host-v1.0.2-runtime/world-host-v1.0.2-runtime");
 const worldCapabilitiesRoot = join(stackRoot, "world-capabilities-v2.3.2-deterministic/world-capabilities-v2.3.2-deterministic");
 const receiptsRoot = join(repositoryRoot, "conformance/poiesis-v1/receipts");
 const sha256 = (value) => createHash("sha256").update(value).digest("hex");

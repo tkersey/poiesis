@@ -15,32 +15,32 @@ const hex64 = /^[0-9a-f]{64}$/;
 assert.equal(parent.format, "poiesis-parent-lock/v1");
 assert.equal(child.format, "poiesis-child-stack-lock/v1");
 assert.deepEqual(parent.tuple, {
-  agent: "2.5.0", boundary: "1.5.0", world: "3.1.3", worldHost: "1.0.1",
+  agent: "2.5.0", boundary: "1.5.0", world: "3.1.3", worldHost: "1.0.2",
   worldCapabilities: "2.3.2", zig: "0.16.0", machineAbi: 2,
   machineStateFormat: "ABL_RNF2", applicationAbi: 1, frame: 1,
   effectProtocol: 1, maximumPendingEffects: 1,
 });
 assert.deepEqual(child.tuple, { ...parent.tuple, agent: "2.6.0" });
 assert.deepEqual(parent.release, {
-  repository: "tkersey/praxis", tag: "v1.0.0", tagCommit: "b9bfbbc0dabb851252cfe07ade87d7876887fca8",
-  candidateCommit: "1e13a14455e1dc72d64a3e4384e25e2e46cf981c",
-  applicationId: "a626ea84e285f7125ce6dc434a58e64c8b3f2402d78e7c1f91f5b3385c226439",
-  applicationWasmSha256: "1a0bddb0ef1d3658a7c9bd7b5b487b12f5beca39469a0118823e786930b48e4a",
-  decisionContractDigest: "89f128184ea102f43ceabadfd0935a029a29044af8d93760296d7550bee32a62",
-  bindingManifestSha256: "e4665432df969755274f10c216ed4975df2f3b275b38659cf83046fb112495a1",
+  repository: "tkersey/praxis", tag: "v1.0.1", tagCommit: "e2053b271abb6e31fc138b76f2b5a1c643614910",
+  candidateCommit: "e2053b271abb6e31fc138b76f2b5a1c643614910",
+  applicationId: "c4f0223a9a39069d97389ce334986c924099d5890887215e52ce9c4adfdb93eb",
+  applicationWasmSha256: "56f1b80d0b5cec60e11c7097bec2d80c81896be3b65e87a4887728aa29b52278",
+  decisionContractDigest: "4d50e2ac529f99d37b6e2e2a307e0948bb2b589a591123ffef45bc7870cd8822",
+  bindingManifestSha256: "473d9c116dc1d81c43f48c55c7e2a074847af0636a023e757a975c0b46802605",
   workspaceAdapterSha256: "fa6603233592fe76e1b22ff2bed7c66b6e17ba273450dc06d0b6875d9e08a7a8",
   openaiAdapterSha256: "dd0dca92a4fb04cb059ce6839689aa42ff8a8f6d84664407c59b5ef35b6f69ad",
   codecsSha256: "5354e4e8c14248b7764d8d9431b73f95891f2ec4294afe097ea91b46caffe68c",
 });
 
 assert.deepEqual(parent.assets.map((asset) => asset.name), [
-  "praxis-v1.0.0-artifacts.tar.gz",
-  "praxis-v1.0.0-checksums.txt",
-  "praxis-v1.0.0-runtime.tar.gz",
-  "praxis-v1.0.0-source.tar.gz",
+  "praxis-v1.0.1-artifacts.tar.gz",
+  "praxis-v1.0.1-checksums.txt",
+  "praxis-v1.0.1-runtime.tar.gz",
+  "praxis-v1.0.1-source.tar.gz",
 ]);
 for (const asset of parent.assets) {
-  assert.match(asset.url, /^https:\/\/github\.com\/tkersey\/praxis\/releases\/download\/v1\.0\.0\//);
+  assert.match(asset.url, /^https:\/\/github\.com\/tkersey\/praxis\/releases\/download\/v1\.0\.1\//);
   assert.match(asset.sha256, hex64);
   assert.ok(Number.isSafeInteger(asset.sizeBytes) && asset.sizeBytes > 0);
   assert.ok(Number.isSafeInteger(asset.maximumExpandedBytes) && asset.maximumExpandedBytes >= asset.sizeBytes || asset.expectedRoot === null);

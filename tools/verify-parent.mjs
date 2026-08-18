@@ -15,11 +15,11 @@ const sha256 = (bytes) => createHash("sha256").update(bytes).digest("hex");
 const lock = JSON.parse(await readFile(new URL("../conformance/poiesis-v1/parent.lock.json", import.meta.url), "utf8"));
 const child = JSON.parse(await readFile(new URL("../conformance/poiesis-v1/child-stack.lock.json", import.meta.url), "utf8"));
 const acquired = await acquireParent({ root: resolve(".poiesis/parent") });
-const source = acquired.roots["praxis-v1.0.0-source.tar.gz"];
-const runtime = acquired.roots["praxis-v1.0.0-runtime.tar.gz"];
-const artifacts = acquired.roots["praxis-v1.0.0-artifacts.tar.gz"];
+const source = acquired.roots[lock.assets.find((asset) => asset.name.endsWith("-source.tar.gz")).name];
+const runtime = acquired.roots[lock.assets.find((asset) => asset.name.endsWith("-runtime.tar.gz")).name];
+const artifacts = acquired.roots[lock.assets.find((asset) => asset.name.endsWith("-artifacts.tar.gz")).name];
 
-const archivedCandidate = JSON.parse(await readFile(join(source, "conformance/praxis-v1/candidate.json"), "utf8"));
+const archivedCandidate = JSON.parse(await readFile(join(source, "conformance/praxis-v1.0.1/candidate.json"), "utf8"));
 const candidate = {
   format: "praxis-candidate/v1",
   praxisCommit: lock.release.candidateCommit,
