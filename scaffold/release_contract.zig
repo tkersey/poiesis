@@ -203,6 +203,80 @@ const DecisionTurnBound = struct {
 pub const maximum_decision_turn_bytes = boundary.schema.maximumEncodedSize(DecisionTurnBound);
 pub const maximum_decision_payload_bytes = 272 * 1024;
 
+pub fn epistemicStateSchemaTypes() @TypeOf(.{
+    Goal,
+    Memory,
+    DecisionView,
+    Assertions,
+    ReleaseAssertion,
+    ListResult,
+    ?ListResult,
+    ListedFiles,
+    FileEntry,
+    Documents,
+    DocumentSnapshot,
+    Evidence,
+    AssertionEvidence,
+    CheckResult,
+    ?CheckResult,
+    ReplaceOutcome,
+    ?ReplaceOutcome,
+    ReplaceApplied,
+    ReplaceDenied,
+    ReplaceConflict,
+    Mutations,
+    MutationSummary,
+    AssertionSearchResult,
+    SearchHits,
+    SearchHit,
+    ReleaseResult,
+    ChangedFiles,
+    Path,
+    DigestHex,
+    FileText,
+    CheckOutput,
+    QueryText,
+    VersionText,
+    SummaryText,
+}) {
+    return .{
+        Goal,
+        Memory,
+        DecisionView,
+        Assertions,
+        ReleaseAssertion,
+        ListResult,
+        ?ListResult,
+        ListedFiles,
+        FileEntry,
+        Documents,
+        DocumentSnapshot,
+        Evidence,
+        AssertionEvidence,
+        CheckResult,
+        ?CheckResult,
+        ReplaceOutcome,
+        ?ReplaceOutcome,
+        ReplaceApplied,
+        ReplaceDenied,
+        ReplaceConflict,
+        Mutations,
+        MutationSummary,
+        AssertionSearchResult,
+        SearchHits,
+        SearchHit,
+        ReleaseResult,
+        ChangedFiles,
+        Path,
+        DigestHex,
+        FileText,
+        CheckOutput,
+        QueryText,
+        VersionText,
+        SummaryText,
+    };
+}
+
 test "release contract preserves the v1 bounds" {
     const std = @import("std");
     try std.testing.expectEqual(@as(usize, 64), maximum_listed_files);
@@ -212,4 +286,5 @@ test "release contract preserves the v1 bounds" {
     try std.testing.expectEqual(@as(usize, 4), maximum_changed_files);
     try std.testing.expectEqual(@as(usize, 270_678), maximum_decision_turn_bytes);
     try std.testing.expect(maximum_decision_turn_bytes <= maximum_decision_payload_bytes);
+    try std.testing.expect(epistemicStateSchemaTypes().len >= 32);
 }

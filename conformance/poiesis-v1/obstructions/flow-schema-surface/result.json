@@ -1,0 +1,16 @@
+{
+  "format": "poiesis-obstruction/v1",
+  "owner": "capability_obstruction",
+  "component": "poiesis immutable Flow surface",
+  "scaffold_tag": "poiesis-v1-scaffold-r4",
+  "result": "failed",
+  "failure": "generated Flow used wrong productReplace order and omitted structured schema types",
+  "compiler_wounds": [
+    "expected u16 field index but received Flow Value Memory",
+    "structured type absent from config.schema_types: Text(64)"
+  ],
+  "smallest_correction": "contract-owned schema tuple and exact index-first Flow signatures",
+  "parent_changed": false,
+  "child_stack_changed": false,
+  "abi_changed": false
+}
