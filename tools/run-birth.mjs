@@ -5,7 +5,7 @@ import { dirname, isAbsolute, join, relative, resolve, sep } from "node:path";
 import { pathToFileURL } from "node:url";
 
 const repositoryIdentity = "tkersey/poiesis";
-const parentRelease = "v1.0.2";
+const parentRelease = "v1.0.3";
 const expectedChangedPaths = Object.freeze([
   "src/generated_definition.zig",
   "src/generated_epistemics.zig",

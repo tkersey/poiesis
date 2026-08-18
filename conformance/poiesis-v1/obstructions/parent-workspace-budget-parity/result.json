@@ -1,0 +1,11 @@
+{
+  "format": "poiesis-obstruction/v1",
+  "owner": "capability_obstruction",
+  "failed_parent_release": "v1.0.2",
+  "machine_maximum_mutation_operations": 10,
+  "adapter_maximum_mutation_operations": 6,
+  "terminal_status": "not_started",
+  "model_effect_count": 0,
+  "mutation_count": 0,
+  "successor_parent_release": "v1.0.3"
+}
