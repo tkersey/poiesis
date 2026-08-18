@@ -1,0 +1,35 @@
+{
+  "format": "praxis-workspace-policy/v1",
+  "repository": "tkersey/poiesis",
+  "baseRevision": "8963d7e4c869b8691523791c77b6d7e34020eb19",
+  "readablePaths": [
+    "scaffold/agent_epistemics_guide.md",
+    "scaffold/release_contract.zig",
+    "scaffold/working_set_helpers.zig",
+    "src/generated_definition.zig",
+    "src/generated_epistemics.zig",
+    "src/generated_policy.zig",
+    "test/generated_semantics.zig"
+  ],
+  "writablePaths": [
+    "src/generated_definition.zig",
+    "src/generated_epistemics.zig",
+    "src/generated_policy.zig",
+    "test/generated_semantics.zig"
+  ],
+  "check": {
+    "kind": "zig-build-check-v1",
+    "argv": [
+      "build",
+      "check",
+      "--summary",
+      "all"
+    ]
+  },
+  "limits": {
+    "maximumFileBytes": 16384,
+    "maximumListedFiles": 64,
+    "maximumChangedFiles": 4,
+    "maximumMutationOperations": 10
+  }
+}
