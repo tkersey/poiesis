@@ -1,0 +1,54 @@
+{
+  "format": "poiesis-obstruction/v1",
+  "owner": "task_failure",
+  "parent_release": "v1.0.5",
+  "parent_candidate_commit": "f46ebdf9e333950eb9577b7391fd7acbd8772923",
+  "parent_application_id": "0b3aa252522d95adda4d090600503b6b9c56b01519c0d07a493564830e8cac75",
+  "scaffold_commit": "8d4de198e1926d92bcb660217665d01084c34ef7",
+  "workspace_policy_sha256": "4af8c10b3b0a5090deb8e4f16787bf07b129246237be3c752e71721b2f58c696",
+  "selected_model": "gpt-5.6-sol",
+  "result": "failed",
+  "attempts": [
+    {
+      "failed_live_receipt_sha256": "54971bea956993064c499b58217ce2d074903fa32d7131ebde8952af2cdec119",
+      "run_id_sha256": "f458dc9cdb29c6f442f63711d5f5f1edbbf6eb3aac587d94d08425b8564e6ec1",
+      "terminal_frame_id": "7c8438a18c0381bf2f338fe90b38fdbe6b885dd4c76ba5ce916d8a5f4c73feda",
+      "terminal_failure": "invalid_variant",
+      "external_effect_count": 39,
+      "mutation_count": 3,
+      "changed_paths": [
+        "src/generated_epistemics.zig",
+        "src/generated_policy.zig"
+      ],
+      "generated_epistemics_bytes": 16384,
+      "generated_epistemics_sha256": "a339c0a250b05292f32e2f0e8b3de07d19c297d184271de6ebdfc977d7e53188",
+      "final_action": "replace_file",
+      "final_action_path": "src/generated_epistemics.zig",
+      "final_replacement_bytes": 16384,
+      "fresh_check_before_final_action": false
+    },
+    {
+      "failed_live_receipt_sha256": "3d8698206da8b8df85f5ccfed5f2e5f5b097d668c17b62922cfb708b0f745cc7",
+      "run_id_sha256": "4c05385560f56272418e28a748a0e4a01af5f548fbc905880c8da39e8ce14b88",
+      "terminal_frame_id": "da6ac1bf4312cc149cc1e96f62b522d56691b9add4f76348b3dd20e0207ec51a",
+      "terminal_failure": "Boundary Machine execution budget exceeded",
+      "external_effect_count": 68,
+      "machine_instructions": 15946536,
+      "mutation_count": 2,
+      "changed_paths": [
+        "src/generated_epistemics.zig",
+        "src/generated_policy.zig"
+      ],
+      "generated_epistemics_bytes": 16384,
+      "generated_epistemics_sha256": "bcd2ccdf698f9cecfda94b55a5e8b66dd7481495e14f42c430e75c00cc19c528",
+      "consecutive_identical_epistemics_reads": 18
+    }
+  ],
+  "maximum_replacements": 10,
+  "maximum_distinct_changed_files": 4,
+  "manual_file_edits": 0,
+  "unapproved_writes": 0,
+  "reference_solution_supplied": false,
+  "negative_evidence_id": "NEG-000007",
+  "smallest_next_experiment": "receiver selects a different exact model; parent, scaffold, brief, policy, and writable scope remain unchanged"
+}

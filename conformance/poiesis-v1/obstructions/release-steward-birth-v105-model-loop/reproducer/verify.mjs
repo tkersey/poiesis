@@ -1,0 +1,20 @@
+import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
+
+const result = JSON.parse(await readFile(new URL("../result.json", import.meta.url), "utf8"));
+assert.equal(result.owner, "task_failure");
+assert.equal(result.parent_release, "v1.0.5");
+assert.equal(result.selected_model, "gpt-5.6-sol");
+assert.equal(result.attempts.length, 2);
+assert.deepEqual(result.attempts.map((attempt) => attempt.generated_epistemics_bytes), [16384, 16384]);
+assert.notEqual(result.attempts[0].generated_epistemics_sha256, result.attempts[1].generated_epistemics_sha256);
+assert.equal(result.attempts[0].terminal_failure, "invalid_variant");
+assert.equal(result.attempts[0].fresh_check_before_final_action, false);
+assert.equal(result.attempts[1].terminal_failure, "Boundary Machine execution budget exceeded");
+assert.equal(result.attempts[1].consecutive_identical_epistemics_reads, 18);
+assert.deepEqual(result.attempts[0].changed_paths, result.attempts[1].changed_paths);
+assert.equal(result.manual_file_edits, 0);
+assert.equal(result.unapproved_writes, 0);
+assert.equal(result.reference_solution_supplied, false);
+assert.equal(result.negative_evidence_id, "NEG-000007");
+process.stdout.write(`${JSON.stringify({ format: "poiesis-obstruction-reproducer/v1", obstruction: true })}\n`);
