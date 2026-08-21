@@ -1,0 +1,20 @@
+{
+  "format": "poiesis-obstruction/v1",
+  "owner": "capability_obstruction",
+  "failed_scaffold_tag": "poiesis-v1-scaffold-r12",
+  "failed_scaffold_commit": "5c1059ba9cb8c9a1532b9654d7b8e87f38d035d5",
+  "failed_live_receipt_sha256": "736c2b8af0bf818de8e4d1c36938704487653ec1b4178896239945c96e81131d",
+  "terminal_failure": "capacity_exceeded",
+  "generated_epistemics_bytes": 16384,
+  "generated_epistemics_compile_error_line": 308,
+  "generated_epistemics_uses_working_set_helpers": true,
+  "failed_build_exposes_helpers_to_epistemics": false,
+  "failed_build_exposes_policy_to_epistemics": false,
+  "successor_build_exposes_helpers_to_policy": true,
+  "successor_build_exposes_helpers_to_epistemics": true,
+  "successor_build_exposes_policy_to_epistemics": true,
+  "writable_file_count_changed": false,
+  "file_capacity_changed": false,
+  "authority_changed": false,
+  "reference_solution_supplied": false
+}

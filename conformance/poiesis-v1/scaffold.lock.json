@@ -1,17 +1,17 @@
 {
   "format": "poiesis-scaffold-lock/v1",
-  "baselineTag": "poiesis-v1-scaffold-r12",
-  "baselineCommit": "5c1059ba9cb8c9a1532b9654d7b8e87f38d035d5",
-  "treeSha256": "73e5e427cfa57d4df30b343812308cbf6a277228114adf7c6f6f31b011f10717",
+  "baselineTag": "poiesis-v1-scaffold-r13",
+  "baselineCommit": "73c1cf703d22acbb91733806ab50e4f5bed7de11",
+  "treeSha256": "92831257fbd8eadd7cc84b45602a0c38151958f900a51367c1591d950f8a79ff",
   "immutableFiles": {
     ".gitattributes": "fbc18878f066923137ddaf2f253d9aca62debef891e118c5485839162fb5e81e",
     ".github/workflows/check.yml": "f7cb53fa66eb91f8aeb7c70cfe9355700b6e2183ef71c317460c221e561b477f",
     ".gitignore": "956d5359668963028bd997c29d81ffbdb44821bc5c037a7b3b00f25de81010c9",
     "LICENSE": "8a9d2f5eee507481878a8c4a878999c925794166967951bf7d90abe595f1d608",
     "README.md": "6affac3c6f8c8e3cd8912de5e2c56ccb9d9e7887fdf4c3d787dfa0f09d701140",
-    "build.zig": "aca1677b1f752bfdc26fb4e7fccf62a4bb4b8cd668fa12176a6072972872f8a2",
+    "build.zig": "6e4cf81662f82b58159751337c7ea3913cf3b1d560a207a8e704b5e94baf9008",
     "build.zig.zon": "054c3da88f2f5bef66f9ec67b3e748074c78c1c0e9a6907d0ab7c1cd454eac7c",
-    "conformance/poiesis-v1/birth-brief.md": "9ee3f7f6377cfc77eb0cffdd767d4ab4c28618693ed114afce9a8b9a860cfc5c",
+    "conformance/poiesis-v1/birth-brief.md": "0417fdb5148e0f1750ae17fe19555854b4986909a433fb06a2d89999cee6086f",
     "conformance/poiesis-v1/child-stack.lock.json": "7a162c566a920795e53e6680e23967d6cf3e3e3c64dda1bbd37b68bc1fc118dd",
     "conformance/poiesis-v1/obstructions/decision-turn-payload-bound/README.md": "c085bbce7a10a03c407bf4a125b77848062826ced65c75419b926cc5e29fb53b",
     "conformance/poiesis-v1/obstructions/decision-turn-payload-bound/owner-analysis.md": "814d0263b334c6c421b9753a6e7d6a1367e7b8d7b23e0ee0af5898b5e6bc479b",
@@ -33,6 +33,10 @@
     "conformance/poiesis-v1/obstructions/generated-mode-hidden-test/owner-analysis.md": "77e86d3dbbf0b24d7da2d95678e3e31dc4a00d42795935c4e1d975bae9f215f1",
     "conformance/poiesis-v1/obstructions/generated-mode-hidden-test/reproducer/verify.mjs": "2e2de9a18b6a6e95ac6dd6f1d5fca4eadf29e337d435ab9a9aac2d9c4c9c82a8",
     "conformance/poiesis-v1/obstructions/generated-mode-hidden-test/result.json": "ef23c76e685c132872557ea8ba0732df8580d99ec50370e8b5e81bf086a96adc",
+    "conformance/poiesis-v1/obstructions/generated-module-closure/README.md": "2ee9be3ca5eaf6cb4e38c6ec1d5442a8d9de5e148b662e2518dfb779727b747b",
+    "conformance/poiesis-v1/obstructions/generated-module-closure/owner-analysis.md": "4336e17d17b01f6bac8130430bced60012760e9ef4e72ba7568e992b37dd51ae",
+    "conformance/poiesis-v1/obstructions/generated-module-closure/reproducer/verify.mjs": "def86841cba1f353df07c6b485f4739cd5d3d112ea32ca3a4ff111c257b88ba8",
+    "conformance/poiesis-v1/obstructions/generated-module-closure/result.json": "4e3264f8f6a193994c4e92c6b20b21c870911e04afc00b4da499a69a66caa434",
     "conformance/poiesis-v1/obstructions/parent-replacement-fold-fuel/README.md": "31e7c1c60a9e5d9e4ce052ffa4ffcc2cc2c9d00d963d2bb180cdc552dc46fed3",
     "conformance/poiesis-v1/obstructions/parent-replacement-fold-fuel/owner-analysis.md": "d65eab5b748d085cac95b1a09b5a53c302e5843970c70d1207a6889e1afa044e",
     "conformance/poiesis-v1/obstructions/parent-replacement-fold-fuel/reproducer/verify.mjs": "8e2a5b8ef5f7f8b4693e5a108ef20a142b025fffc4ee0f6e4ac6488ae0c8b7d9",
@@ -67,7 +71,7 @@
     "conformance/poiesis-v1/obstructions/scaffold-lock-self-reference/result.json": "95851a087dbbf7341dc23bf02c9a95a0cb72f1b4151a32be7c74d552a35522a0",
     "conformance/poiesis-v1/parent.lock.json": "119bdce20f6b7bae74d341e2c0317898048f5ae8cd1a242aa920e4362c3c8f62",
     "package.json": "9773394ffc2f87de6cc15bbbc5323d10f743434b824c20e5a63c073d9b6befbc",
-    "scaffold/agent_epistemics_guide.md": "b1674ff55b955314f06b6b4a76edb67a06ab366d6b1fcb5b8afe87f5e81243ec",
+    "scaffold/agent_epistemics_guide.md": "02af9bde5a097101d24462399e1ea9e9800789e628545b9242b31fe6bb97c742",
     "scaffold/application.zig": "49a19274f14c190ef45ae957571cc4844eb346786e4d3f40f8559656a7744df7",
     "scaffold/emit_binding_manifest.zig": "d7bb9dad15a48b3907f15414e26c1ee4f7778e89535c27d84554fddc506c437e",
     "scaffold/emit_codec_vectors.zig": "df9f0c74eaa68354a0feba1decacaf319bbc3986e8acad9a49d429a844be42a6",
@@ -124,13 +128,13 @@
       "maximum_bytes": 16384
     },
     "src/generated_epistemics.zig": {
-      "git_blob_oid": "f51ebcf50f8bc56d551289ec03294021a376fd4a",
-      "sha256": "3e00d30fdfdcba5abd4c5edb06738ed9653436a445fcdc0adb1e745c2a68c306",
+      "git_blob_oid": "7bd9231bfd3458104f09155e5946ef8707aad863",
+      "sha256": "1e36864ebfb75896a57bd0f21296fe782233ace57745e8e326426e6f801d3b2e",
       "maximum_bytes": 16384
     },
     "src/generated_policy.zig": {
-      "git_blob_oid": "d09e3af661f5078e65a99737ba10596aface9bf4",
-      "sha256": "f0fe749f3be9b20e0b4c4f8d27988ec37c170a36d096db44b65dee389f028d28",
+      "git_blob_oid": "b593392c81a7bc39234e980f2b7141a2d2100be4",
+      "sha256": "dff0287568675ab0c45f742ced6ad370fdc021176200cdcc96091ee387c6900f",
       "maximum_bytes": 16384
     },
     "test/generated_semantics.zig": {
@@ -141,6 +145,6 @@
   },
   "parentLockSha256": "119bdce20f6b7bae74d341e2c0317898048f5ae8cd1a242aa920e4362c3c8f62",
   "childStackLockSha256": "7a162c566a920795e53e6680e23967d6cf3e3e3c64dda1bbd37b68bc1fc118dd",
-  "birthBriefSha256": "9ee3f7f6377cfc77eb0cffdd767d4ab4c28618693ed114afce9a8b9a860cfc5c",
-  "birthPolicySha256": "aae5d4ccb30dc2481efb33579a317e497260d64c6d3bc563db5b67d9fc3e8ac7"
+  "birthBriefSha256": "0417fdb5148e0f1750ae17fe19555854b4986909a433fb06a2d89999cee6086f",
+  "birthPolicySha256": "8a5b96bef88c7bea0fea49fb9f98bbe96171f86627c945ce4f766f6b42e47968"
 }
