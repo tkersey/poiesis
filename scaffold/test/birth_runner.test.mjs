@@ -21,7 +21,7 @@ const context = { scaffoldCommit: parent.base_revision, birthBriefSha256: "4".re
 describe("controlled birth runner", () => {
   test("projects only bounded parent evidence into the Poiesis birth receipt", () => {
     const receipt = birthReceiptFromParent(parent, context);
-    expect(receipt).toMatchObject({ poiesis_format: 1, mode: "birth", parent_release: "v1.0.4", changed_paths: _birthInternals.expectedChangedPaths, full_check_passed: true, hidden_birth_verifier_passed: true });
+    expect(receipt).toMatchObject({ poiesis_format: 1, mode: "birth", parent_release: "v1.0.5", changed_paths: _birthInternals.expectedChangedPaths, full_check_passed: true, hidden_birth_verifier_passed: true });
     expect(JSON.stringify(receipt)).not.toContain("OPENAI_API_KEY");
   });
 

@@ -22,25 +22,25 @@ assert.deepEqual(parent.tuple, {
 });
 assert.deepEqual(child.tuple, { ...parent.tuple, agent: "2.6.0" });
 assert.deepEqual(parent.release, {
-  repository: "tkersey/praxis", tag: "v1.0.4", tagCommit: "28f592ce317eb2101958e6119752cc888f60f2f8",
-  candidateCommit: "28f592ce317eb2101958e6119752cc888f60f2f8",
-  applicationId: "7e7b7b7bbdc80743b1abf2142becd3ee62e16aeee95e8ad5c90771393d8bf30e",
-  applicationWasmSha256: "e8848d7ac78fd565f5aa448c59033fdf5343ee2bcb05a2959f0cad9dc6a456d7",
-  decisionContractDigest: "e2cd75ef38b79be58604b154c4f1feda55f8d82f5122f854aadf322457e07038",
-  bindingManifestSha256: "b8872ea9f34ddfb72ce3ba41841450d6f774411585acf17fb53197ffd13dbe7e",
-  workspaceAdapterSha256: "86a7dcc062068a418c0f5c4f30180d9dbfa2ec029beeb11695df50edbdfd0872",
+  repository: "tkersey/praxis", tag: "v1.0.5", tagCommit: "f46ebdf9e333950eb9577b7391fd7acbd8772923",
+  candidateCommit: "f46ebdf9e333950eb9577b7391fd7acbd8772923",
+  applicationId: "0b3aa252522d95adda4d090600503b6b9c56b01519c0d07a493564830e8cac75",
+  applicationWasmSha256: "e79d46048bcad2f949a13bf99c6a885b86db379e84aa6ddf88fd713faced44d1",
+  decisionContractDigest: "822764fac3476f73666a2439422486d557bd4aaf0defcea76dade3c61cd1fc5e",
+  bindingManifestSha256: "9981b290ab6e0a94f594cca4eb96c170a2db188fb8ae9deaa79373594b72849b",
+  workspaceAdapterSha256: "527930ea1e7b997b2f761e5ca4e082b600dc786d7fb458bb3c9011eed0e3d7e4",
   openaiAdapterSha256: "dd0dca92a4fb04cb059ce6839689aa42ff8a8f6d84664407c59b5ef35b6f69ad",
-  codecsSha256: "5354e4e8c14248b7764d8d9431b73f95891f2ec4294afe097ea91b46caffe68c",
+  codecsSha256: "dd05bfd6a80818def9bc2b738ce6db41e03722e4006617205896fca00c794e4b",
 });
 
 assert.deepEqual(parent.assets.map((asset) => asset.name), [
-  "praxis-v1.0.4-artifacts.tar.gz",
-  "praxis-v1.0.4-checksums.txt",
-  "praxis-v1.0.4-runtime.tar.gz",
-  "praxis-v1.0.4-source.tar.gz",
+  "praxis-v1.0.5-artifacts.tar.gz",
+  "praxis-v1.0.5-checksums.txt",
+  "praxis-v1.0.5-runtime.tar.gz",
+  "praxis-v1.0.5-source.tar.gz",
 ]);
 for (const asset of parent.assets) {
-  assert.match(asset.url, /^https:\/\/github\.com\/tkersey\/praxis\/releases\/download\/v1\.0\.4\//);
+  assert.match(asset.url, /^https:\/\/github\.com\/tkersey\/praxis\/releases\/download\/v1\.0\.5\//);
   assert.match(asset.sha256, hex64);
   assert.ok(Number.isSafeInteger(asset.sizeBytes) && asset.sizeBytes > 0);
   assert.ok(Number.isSafeInteger(asset.maximumExpandedBytes) && asset.maximumExpandedBytes >= asset.sizeBytes || asset.expectedRoot === null);

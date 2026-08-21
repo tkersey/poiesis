@@ -19,7 +19,7 @@ const source = acquired.roots[lock.assets.find((asset) => asset.name.endsWith("-
 const runtime = acquired.roots[lock.assets.find((asset) => asset.name.endsWith("-runtime.tar.gz")).name];
 const artifacts = acquired.roots[lock.assets.find((asset) => asset.name.endsWith("-artifacts.tar.gz")).name];
 
-const archivedCandidate = JSON.parse(await readFile(join(source, "conformance/praxis-v1.0.4/candidate.json"), "utf8"));
+const archivedCandidate = JSON.parse(await readFile(join(source, "conformance/praxis-v1.0.5/candidate.json"), "utf8"));
 const candidate = {
   format: "praxis-candidate/v1",
   praxisCommit: lock.release.candidateCommit,
