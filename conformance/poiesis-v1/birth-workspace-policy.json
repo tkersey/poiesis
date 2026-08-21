@@ -1,7 +1,7 @@
 {
   "format": "praxis-workspace-policy/v1",
   "repository": "tkersey/poiesis",
-  "baseRevision": "8d4de198e1926d92bcb660217665d01084c34ef7",
+  "baseRevision": "88bd7af1ce3fd6c13c00028dd0cd3dbd66b17a57",
   "readablePaths": [
     "scaffold/agent_epistemics_guide.md",
     "scaffold/release_contract.zig",

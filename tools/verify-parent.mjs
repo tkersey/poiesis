@@ -19,7 +19,15 @@ const source = acquired.roots[lock.assets.find((asset) => asset.name.endsWith("-
 const runtime = acquired.roots[lock.assets.find((asset) => asset.name.endsWith("-runtime.tar.gz")).name];
 const artifacts = acquired.roots[lock.assets.find((asset) => asset.name.endsWith("-artifacts.tar.gz")).name];
 
-const archivedCandidate = JSON.parse(await readFile(join(source, "conformance/praxis-v1.0.5/candidate.json"), "utf8"));
+const releaseVersion = lock.release.tag.slice(1);
+const archivedCandidateBytes = await readFile(join(source, `conformance/praxis-v${releaseVersion}/candidate.json`));
+const archivedCandidate = JSON.parse(archivedCandidateBytes);
+const standaloneCandidateAsset = lock.assets.find((asset) => asset.name.endsWith("-candidate.json"));
+const successorReceiptAsset = lock.assets.find((asset) => asset.name.endsWith("-successor-receipt.json"));
+const checksumsAsset = lock.assets.find((asset) => asset.name.endsWith("-checksums.txt"));
+assert.ok(standaloneCandidateAsset && successorReceiptAsset && checksumsAsset);
+const standaloneCandidateBytes = await readFile(join(acquired.root, "downloads", standaloneCandidateAsset.name));
+assert.deepEqual(standaloneCandidateBytes, archivedCandidateBytes);
 const candidate = {
   format: "praxis-candidate/v1",
   praxisCommit: lock.release.candidateCommit,
@@ -30,12 +38,32 @@ const candidate = {
   workspaceAdapterSha256: lock.release.workspaceAdapterSha256,
   openaiAdapterSha256: lock.release.openaiAdapterSha256,
   codecsSha256: lock.release.codecsSha256,
+  sourceManifestSha256: lock.release.sourceManifestSha256,
 };
 assert.equal(archivedCandidate.format, candidate.format);
-assert.match(archivedCandidate.praxisCommit, /^[0-9a-f]{40}$/);
-for (const field of ["applicationId", "applicationWasmSha256", "decisionContractDigest", "bindingManifestSha256", "workspaceAdapterSha256", "openaiAdapterSha256", "codecsSha256"]) {
+assert.equal(archivedCandidate.praxisCommit, lock.release.archivedCandidateCommit);
+for (const field of ["applicationId", "applicationWasmSha256", "decisionContractDigest", "bindingManifestSha256", "workspaceAdapterSha256", "openaiAdapterSha256", "codecsSha256", "sourceManifestSha256"]) {
   assert.equal(archivedCandidate[field], candidate[field]);
 }
+
+const successorReceipt = JSON.parse(await readFile(join(acquired.root, "downloads", successorReceiptAsset.name), "utf8"));
+assert.equal(successorReceipt.format, "praxis-successor-artifact-release/v1");
+assert.equal(successorReceipt.release, lock.release.tag);
+assert.equal(successorReceipt.candidate_commit, archivedCandidate.praxisCommit);
+assert.equal(successorReceipt.application_id, candidate.applicationId);
+assert.equal(successorReceipt.application_wasm_sha256, candidate.applicationWasmSha256);
+assert.equal(successorReceipt.decision_contract_digest, candidate.decisionContractDigest);
+assert.equal(successorReceipt.live_execution_claimed, false);
+assert.equal(successorReceipt.publication_claimed, false);
+
+const checksums = new Map((await readFile(join(acquired.root, "downloads", checksumsAsset.name), "utf8")).trim().split("\n").map((line) => {
+  const match = line.match(/^([0-9a-f]{64})  ([A-Za-z0-9._-]+)$/);
+  assert.ok(match);
+  return [match[2], match[1]];
+}));
+const checksumAssets = lock.assets.filter((asset) => asset.name !== checksumsAsset.name);
+assert.equal(checksums.size, checksumAssets.length);
+for (const asset of checksumAssets) assert.equal(checksums.get(asset.name), asset.sha256);
 
 const runtimeFiles = {
   workspaceAdapterSha256: "runtime/workspace-adapter.mjs",

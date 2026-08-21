@@ -116,13 +116,15 @@ async function materializeRunner(root, lock, roots) {
   command("git", ["cat-file", "-e", `${lock.release.candidateCommit}^{commit}`], { cwd: runner, environment });
   command("git", ["update-ref", "refs/heads/release", lock.release.tagCommit], { cwd: runner, environment });
   command("git", ["symbolic-ref", "HEAD", "refs/heads/release"], { cwd: runner, environment });
+  command("git", ["read-tree", lock.release.tagCommit], { cwd: runner, environment });
   command("git", ["fsck", "--full", "--strict", "--no-dangling"], { cwd: runner, environment });
 
+  const sourceAsset = lock.assets.find((asset) => asset.name.endsWith("-source.tar.gz"));
   const runtimeAsset = lock.assets.find((asset) => asset.name.endsWith("-runtime.tar.gz"));
   const artifactsAsset = lock.assets.find((asset) => asset.name.endsWith("-artifacts.tar.gz"));
-  if (!runtimeAsset || !artifactsAsset) throw new Error("parent runtime or artifacts asset is missing");
-  await copyTree(roots[runtimeAsset.name], runner);
-  await copyTree(roots[artifactsAsset.name], runner);
+  if (!sourceAsset || !runtimeAsset || !artifactsAsset) throw new Error("parent source, runtime, or artifacts asset is missing");
+  await copyTree(roots[sourceAsset.name], runner);
+  await copyTree(join(roots[artifactsAsset.name], "zig-out"), join(runner, "zig-out"));
   await copyTree(roots.worldHost, join(runner, ".praxis/reference-stack/extracted/worldHost", basename(roots.worldHost)));
   await copyTree(roots.worldCapabilities, join(runner, ".praxis/reference-stack/extracted/worldCapabilities", basename(roots.worldCapabilities)));
 
@@ -137,6 +139,7 @@ async function materializeRunner(root, lock, roots) {
     workspaceAdapterSha256: lock.release.workspaceAdapterSha256,
     openaiAdapterSha256: lock.release.openaiAdapterSha256,
     codecsSha256: lock.release.codecsSha256,
+    sourceManifestSha256: lock.release.sourceManifestSha256,
     referenceStackLockSha256,
     deterministicReceiptSha256: lock.lifecycleReceipts.deterministic,
     retryReceiptSha256: lock.lifecycleReceipts.retry,
@@ -157,7 +160,7 @@ export async function acquireParent({ root = defaultRoot } = {}) {
   const runtimeAsset = lock.assets.find((asset) => asset.name.endsWith("-runtime.tar.gz"));
   if (!sourceAsset || !runtimeAsset) throw new Error("parent source or runtime asset is missing");
   for (const lockedAsset of lock.assets) {
-    const asset = lockedAsset.name === sourceAsset.name ? { ...lockedAsset, allowedPaxComment: lock.release.candidateCommit } : lockedAsset;
+    const asset = lockedAsset.name === sourceAsset.name ? { ...lockedAsset, allowedPaxComment: lock.release.archivedCandidateCommit } : lockedAsset;
     const acquired = await download(asset, downloads);
     if (asset.expectedRoot) roots[asset.name] = await extract(asset, acquired.bytes, extracted);
   }

@@ -2,49 +2,67 @@
   "format": "poiesis-parent-lock/v1",
   "release": {
     "repository": "tkersey/praxis",
-    "tag": "v1.0.5",
-    "tagCommit": "f46ebdf9e333950eb9577b7391fd7acbd8772923",
-    "candidateCommit": "f46ebdf9e333950eb9577b7391fd7acbd8772923",
-    "applicationId": "0b3aa252522d95adda4d090600503b6b9c56b01519c0d07a493564830e8cac75",
-    "applicationWasmSha256": "e79d46048bcad2f949a13bf99c6a885b86db379e84aa6ddf88fd713faced44d1",
-    "decisionContractDigest": "822764fac3476f73666a2439422486d557bd4aaf0defcea76dade3c61cd1fc5e",
-    "bindingManifestSha256": "9981b290ab6e0a94f594cca4eb96c170a2db188fb8ae9deaa79373594b72849b",
+    "tag": "v1.0.6",
+    "tagCommit": "58c1f28cb8087d6a1a284aa25e587c93b7e420e2",
+    "candidateCommit": "58c1f28cb8087d6a1a284aa25e587c93b7e420e2",
+    "archivedCandidateCommit": "5c6ab18a154ba6c9e66041daf121023398d82109",
+    "applicationId": "d9c7744e1ec5e662ff3830dc2d505b4a5777c89cdac8a29d2d8a9da341701ca5",
+    "applicationWasmSha256": "37d48880360180b7ae124ecc23f825b315e67ea347d830f12011591ce33b08f6",
+    "decisionContractDigest": "b9b5d8e66f12aacc476951cf5eab5bab2e8cca8be5e9117346a6d744cb9f63e0",
+    "bindingManifestSha256": "999007d9ab7516d0408dba21e55d3434bd9cafc8fe727449041bc4f3f568f826",
     "workspaceAdapterSha256": "527930ea1e7b997b2f761e5ca4e082b600dc786d7fb458bb3c9011eed0e3d7e4",
     "openaiAdapterSha256": "dd0dca92a4fb04cb059ce6839689aa42ff8a8f6d84664407c59b5ef35b6f69ad",
-    "codecsSha256": "dd05bfd6a80818def9bc2b738ce6db41e03722e4006617205896fca00c794e4b"
+    "codecsSha256": "f73c15ee12a37b12000a5c9f1a4e9ff45ee72f2d80dee4cc789f696188a42510",
+    "sourceManifestSha256": "57634e533b2627b35642ec48dafe92c632d27e1c35fe1ff6519205fdd4c81cda"
   },
   "assets": [
     {
-      "name": "praxis-v1.0.5-artifacts.tar.gz",
-      "url": "https://github.com/tkersey/praxis/releases/download/v1.0.5/praxis-v1.0.5-artifacts.tar.gz",
-      "sha256": "41ca13aaf7aa7a16111c0a1c98aabb048797841d0c184bfc5bdf208464bca97c",
-      "sizeBytes": 1184355,
+      "name": "praxis-v1.0.6-artifacts.tar.gz",
+      "url": "https://github.com/tkersey/praxis/releases/download/v1.0.6/praxis-v1.0.6-artifacts.tar.gz",
+      "sha256": "687732340b0a87c7a9c915a5832004fc2e88e9e8eec0933277fa9c8a034a842f",
+      "sizeBytes": 8256044,
       "maximumExpandedBytes": 33554432,
-      "expectedRoot": "praxis-1.0.5-artifacts"
+      "expectedRoot": "praxis-1.0.6-artifacts"
     },
     {
-      "name": "praxis-v1.0.5-checksums.txt",
-      "url": "https://github.com/tkersey/praxis/releases/download/v1.0.5/praxis-v1.0.5-checksums.txt",
-      "sha256": "d058f78cafe4243bddd696199a73f965ec9c4027cfba805551f54ef1519200dd",
-      "sizeBytes": 286,
-      "maximumExpandedBytes": 286,
+      "name": "praxis-v1.0.6-candidate.json",
+      "url": "https://github.com/tkersey/praxis/releases/download/v1.0.6/praxis-v1.0.6-candidate.json",
+      "sha256": "0a5559f1b8bfb4c95c1a64882fb5e630130067e35745552aa59f56f64161957e",
+      "sizeBytes": 1319,
+      "maximumExpandedBytes": 1319,
       "expectedRoot": null
     },
     {
-      "name": "praxis-v1.0.5-runtime.tar.gz",
-      "url": "https://github.com/tkersey/praxis/releases/download/v1.0.5/praxis-v1.0.5-runtime.tar.gz",
-      "sha256": "dc46b5aaf2724dadd08e2e649e382ab1beef3fb67a2131b1031591cdab33cc01",
-      "sizeBytes": 41739,
-      "maximumExpandedBytes": 1048576,
-      "expectedRoot": "praxis-1.0.5-runtime"
+      "name": "praxis-v1.0.6-checksums.txt",
+      "url": "https://github.com/tkersey/praxis/releases/download/v1.0.6/praxis-v1.0.6-checksums.txt",
+      "sha256": "71713558aaf318b7c7d49794eeea16d4db935645dd3574e191bcac0b790baca3",
+      "sizeBytes": 484,
+      "maximumExpandedBytes": 484,
+      "expectedRoot": null
     },
     {
-      "name": "praxis-v1.0.5-source.tar.gz",
-      "url": "https://github.com/tkersey/praxis/releases/download/v1.0.5/praxis-v1.0.5-source.tar.gz",
-      "sha256": "e7ed53359deed8f3011d2bdca47074f7e2cb959daa9255babffdb904464b5244",
-      "sizeBytes": 85270,
+      "name": "praxis-v1.0.6-runtime.tar.gz",
+      "url": "https://github.com/tkersey/praxis/releases/download/v1.0.6/praxis-v1.0.6-runtime.tar.gz",
+      "sha256": "d94d810ee1d21cd630ef418644346a3a20257a58670c8fa6658cca4dab0e9cca",
+      "sizeBytes": 48193,
       "maximumExpandedBytes": 1048576,
-      "expectedRoot": "praxis-1.0.5"
+      "expectedRoot": "praxis-1.0.6-runtime"
+    },
+    {
+      "name": "praxis-v1.0.6-source.tar.gz",
+      "url": "https://github.com/tkersey/praxis/releases/download/v1.0.6/praxis-v1.0.6-source.tar.gz",
+      "sha256": "ab7b09e94c3fa027fe264a92b563fa2249bc1147e869deaf0160fa1655d3f351",
+      "sizeBytes": 114782,
+      "maximumExpandedBytes": 1048576,
+      "expectedRoot": "praxis-1.0.6"
+    },
+    {
+      "name": "praxis-v1.0.6-successor-receipt.json",
+      "url": "https://github.com/tkersey/praxis/releases/download/v1.0.6/praxis-v1.0.6-successor-receipt.json",
+      "sha256": "e49cfc9ac4e8273113c4390457032087dc945943e251bd54b11466c12a0641c3",
+      "sizeBytes": 937,
+      "maximumExpandedBytes": 937,
+      "expectedRoot": null
     }
   ],
   "tuple": {
@@ -62,9 +80,9 @@
     "maximumPendingEffects": 1
   },
   "lifecycleReceipts": {
-    "deterministic": "4f9d037d95aad9a861843f99126465da0b805008501818139666248d65e09900",
-    "retry": "e1acaf6e70a5f3b9ca8e2f3791dcf93bd5227b32ed1a84f8a342f72f2dd9266d",
-    "replay": "438297c9686854b245a03126c286d45319595f092016bee0c4659e59af9ce13c",
-    "measure": "0aad5e03384edf17ae2350eba815e6a2feda727f987bebc8067ea2a0afe560a5"
+    "deterministic": "068deff73b893dd3f9b7c7a3d386e1b85d198c086246948a4fc306b01fc19bec",
+    "retry": "d95a6f225b189267660d47d3d910fe0c483dcb736c91cb19179f8825693b8e8e",
+    "replay": "12b91a9f840766c62d934e375ca8f844eecf5ba9ce4cde67856bfca43f3ee4b8",
+    "measure": "f0e5e3e745873ef022c225f41f2dff7b1ac8a0e91ca9742f3820050cca493ae7"
   }
 }
