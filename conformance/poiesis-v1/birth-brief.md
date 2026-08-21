@@ -15,6 +15,14 @@ Inspect the immutable release contract, Agent v2.6 epistemics surface guide, wor
 
 `src/generated_policy.zig` must define non-placeholder semantic identity `agent.epistemics.release-steward.v1`, the complete immutable instruction text, stable action names and descriptions, exact budgets, exact Machine limits, and constants required by lowering.
 
+The generated policy module may additionally contain parent-authored,
+application-specific Flow predicate and fold helper functions used by generated
+epistemics. Use this second generated slot to keep both completed files below
+16 KiB. The build exposes `working_set_helpers` to generated policy and exposes
+both `generated_policy` and `working_set_helpers` to generated epistemics. Do
+not duplicate the immutable policy-neutral helper loops in either generated
+file.
+
 Use maximum turns 48, maximum decisions 48, maximum effect actions 47, and maximum child actions 0. Use maximum frames 48, maximum state bytes 511 KiB, and maximum Machine fuel 8,000,000.
 
 The instruction text must establish all of these laws:
@@ -32,6 +40,11 @@ The instruction text must establish all of these laws:
 ## Epistemics
 
 `src/generated_epistemics.zig` must implement a custom Agent EpistemicStrategy. Its Memory type is `release_contract.Memory`; its DecisionView type is `release_contract.DecisionView`. It must provide deterministic Goal initialization, observation folding, DecisionView projection, typed pre-effect action admission, typed final admission, specialized action admission wherever Agent v2.6.0 permits it, a non-placeholder implementation identity, and sufficient declared lowering complexity. Use Agent Flow only. Do not invoke Boundary directly or encode policy in JavaScript.
+
+Keep the custom strategy type and required `emit*` entry points in this file,
+but call parent-authored shared lowering functions from `generated_policy` where
+that avoids duplicating application-specific Flow construction. Both files are
+generated semantic source and remain inside the same compiled Machine.
 
 Use empty portable custom config. Close over the comptime `agent` and contract parameters in the implementation type, and return the immutable contract's `epistemicStateSchemaTypes()` tuple exactly.
 

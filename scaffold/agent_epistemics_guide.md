@@ -68,6 +68,14 @@ These helpers encode no Release Steward field index, capacity, action, or
 completion law. Generated semantics still selects every type, field index,
 comparison, capacity predicate, and admission rule.
 
+The build graph also exposes `generated_policy` to `generated_epistemics` and
+exposes `working_set_helpers` to both generated modules. The parent may place
+its own application-specific Flow predicate and fold helpers in
+`generated_policy.zig`, then call them from the custom strategy in
+`generated_epistemics.zig`. This is a source-layout mechanism across two
+parent-authored writable files, not receiver-authored policy. Keep the custom
+strategy type and all required `emit*` entry points in generated epistemics.
+
 A block's type tuple is its parameter list. Every jump or branch edge must pass exactly one argument of the matching type for every declared parameter:
 
     const yes = flow.block(.segment, .{ contract.Memory, contract.Observation });

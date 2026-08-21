@@ -12,15 +12,25 @@ pub fn build(b: *std.Build) void {
         .optimize = optimize,
     });
 
+    const working_set_helpers_module = b.createModule(.{
+        .root_source_file = b.path("scaffold/working_set_helpers.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
     const policy_module = b.createModule(.{
         .root_source_file = b.path("src/generated_policy.zig"),
         .target = target,
         .optimize = optimize,
+        .imports = &.{.{ .name = "working_set_helpers", .module = working_set_helpers_module }},
     });
     const epistemics_module = b.createModule(.{
         .root_source_file = b.path("src/generated_epistemics.zig"),
         .target = target,
         .optimize = optimize,
+        .imports = &.{
+            .{ .name = "generated_policy", .module = policy_module },
+            .{ .name = "working_set_helpers", .module = working_set_helpers_module },
+        },
     });
     const contract_module = b.createModule(.{
         .root_source_file = b.path("scaffold/release_contract.zig"),
@@ -272,15 +282,25 @@ fn createDefinitionModule(
     agent: *std.Build.Module,
     boundary: *std.Build.Module,
 ) *std.Build.Module {
+    const working_set_helpers = b.createModule(.{
+        .root_source_file = b.path("scaffold/working_set_helpers.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
     const policy = b.createModule(.{
         .root_source_file = b.path("src/generated_policy.zig"),
         .target = target,
         .optimize = optimize,
+        .imports = &.{.{ .name = "working_set_helpers", .module = working_set_helpers }},
     });
     const epistemics = b.createModule(.{
         .root_source_file = b.path("src/generated_epistemics.zig"),
         .target = target,
         .optimize = optimize,
+        .imports = &.{
+            .{ .name = "generated_policy", .module = policy },
+            .{ .name = "working_set_helpers", .module = working_set_helpers },
+        },
     });
     const contract = b.createModule(.{
         .root_source_file = b.path("scaffold/release_contract.zig"),

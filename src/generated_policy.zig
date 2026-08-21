@@ -1,3 +1,9 @@
+const working_set_helpers = @import("working_set_helpers");
+
+comptime {
+    _ = working_set_helpers.textEqual;
+}
+
 pub const semantic_identity = "poiesis_stub_v1";
 
 pub const instructions =
