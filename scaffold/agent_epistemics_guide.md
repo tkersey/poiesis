@@ -50,6 +50,24 @@ Exact call shapes used by generated lowerings:
     vectorPush(vector, element)
     vectorTruncate(vector, u32_length)
 
+The immutable `scaffold/working_set_helpers.zig` owns policy-neutral lowering
+mechanics that would otherwise consume the bounded generated epistemics slot.
+Import it as `working_set_helpers` and use these exact helpers instead of
+reimplementing their loops in generated source:
+
+    helpers.zero(flow, T, context)
+    helpers.one(flow, T, context)
+    helpers.boolean(flow, value, context)
+    helpers.increment(flow, value, T, context)
+    helpers.replaceProductField(flow, product, field_index, replacement)
+    helpers.upsertProductKey(flow, VectorType, values, item, key_index, text_key, context)
+    helpers.vectorContainsTextField(flow, values, field_index, expected, context)
+    helpers.vectorContainsTextPair(flow, values, first_index, first_expected, second_index, second_expected, context)
+
+These helpers encode no Release Steward field index, capacity, action, or
+completion law. Generated semantics still selects every type, field index,
+comparison, capacity predicate, and admission rule.
+
 A block's type tuple is its parameter list. Every jump or branch edge must pass exactly one argument of the matching type for every declared parameter:
 
     const yes = flow.block(.segment, .{ contract.Memory, contract.Observation });

@@ -1,8 +1,8 @@
 {
   "format": "poiesis-scaffold-lock/v1",
-  "baselineTag": "poiesis-v1-scaffold-r11",
-  "baselineCommit": "88bd7af1ce3fd6c13c00028dd0cd3dbd66b17a57",
-  "treeSha256": "3b90c9ba284f8d85ceebf3814380050e5b4edc09da03bf27f05156f36acc5bb1",
+  "baselineTag": "poiesis-v1-scaffold-r12",
+  "baselineCommit": "5c1059ba9cb8c9a1532b9654d7b8e87f38d035d5",
+  "treeSha256": "73e5e427cfa57d4df30b343812308cbf6a277228114adf7c6f6f31b011f10717",
   "immutableFiles": {
     ".gitattributes": "fbc18878f066923137ddaf2f253d9aca62debef891e118c5485839162fb5e81e",
     ".github/workflows/check.yml": "f7cb53fa66eb91f8aeb7c70cfe9355700b6e2183ef71c317460c221e561b477f",
@@ -57,13 +57,17 @@
     "conformance/poiesis-v1/obstructions/release-steward-birth-v105-model-loop/owner-analysis.md": "d3f520466d136643f5cadb1d50242c5d24083d541b5189a4131b5f1007f5048c",
     "conformance/poiesis-v1/obstructions/release-steward-birth-v105-model-loop/reproducer/verify.mjs": "9566fdac45b7fabb37b4e231f4563309cb5e1afc71e19949bca75b29d2141368",
     "conformance/poiesis-v1/obstructions/release-steward-birth-v105-model-loop/result.json": "f6fe3d4ab1aba1502d64afac3ec25ff7e914bb725904c0b35a85786f31b6bdb2",
+    "conformance/poiesis-v1/obstructions/release-steward-birth-v106-epistemics-capacity/README.md": "d0430228f79b160367f878d93e7941e217a0cc164869a246e93b7544175cb8cf",
+    "conformance/poiesis-v1/obstructions/release-steward-birth-v106-epistemics-capacity/owner-analysis.md": "42a03944d0931593db6f8c7fb064d981e83d3b769e6d4fe132641455c261708a",
+    "conformance/poiesis-v1/obstructions/release-steward-birth-v106-epistemics-capacity/reproducer/verify.mjs": "80d651c8fd765323964380aa33392a078163121019a51afc3838fe3eeae340f0",
+    "conformance/poiesis-v1/obstructions/release-steward-birth-v106-epistemics-capacity/result.json": "eec26a7ebf32e0caec4380968d3fe376c726350c91417e3a96c50c70ed0e3464",
     "conformance/poiesis-v1/obstructions/scaffold-lock-self-reference/README.md": "ebaa3c8a6f862c20d8ee8e3b11a889217bb75c3756312787cee81cc25ffbc82e",
     "conformance/poiesis-v1/obstructions/scaffold-lock-self-reference/owner-analysis.md": "07284abcac22970145722ccfc4491738ebfe3f9bfdf0d17099e4f7a536e0c805",
     "conformance/poiesis-v1/obstructions/scaffold-lock-self-reference/reproducer/verify.mjs": "2aa93f62b3c656a95ed1670baee3508c58ae2ad4d97daffd1e4b211226a5e6b0",
     "conformance/poiesis-v1/obstructions/scaffold-lock-self-reference/result.json": "95851a087dbbf7341dc23bf02c9a95a0cb72f1b4151a32be7c74d552a35522a0",
     "conformance/poiesis-v1/parent.lock.json": "119bdce20f6b7bae74d341e2c0317898048f5ae8cd1a242aa920e4362c3c8f62",
     "package.json": "9773394ffc2f87de6cc15bbbc5323d10f743434b824c20e5a63c073d9b6befbc",
-    "scaffold/agent_epistemics_guide.md": "1b8a31b8126a40c5d2c41a66eb990ab0edbd86cce06c1d2b8cfaa285aae9c525",
+    "scaffold/agent_epistemics_guide.md": "b1674ff55b955314f06b6b4a76edb67a06ab366d6b1fcb5b8afe87f5e81243ec",
     "scaffold/application.zig": "49a19274f14c190ef45ae957571cc4844eb346786e4d3f40f8559656a7744df7",
     "scaffold/emit_binding_manifest.zig": "d7bb9dad15a48b3907f15414e26c1ee4f7778e89535c27d84554fddc506c437e",
     "scaffold/emit_codec_vectors.zig": "df9f0c74eaa68354a0feba1decacaf319bbc3986e8acad9a49d429a844be42a6",
@@ -96,7 +100,7 @@
     "scaffold/test/scaffold_freeze.test.mjs": "3c3f341fa8875ce3f39d0c5bb9a6e44159ffb43ba313b6ae3ffe4c334d0c2c71",
     "scaffold/test/sparse_wasm.test.mjs": "b63aa3b49b20371cadbb781882c7c6eea6b8706bb36ad230c0a52a465d1a8748",
     "scaffold/wasm_main.zig": "c5930395120b6a8077066a430ee078d6b9f59f40854ef94241a9e22e835e5fde",
-    "scaffold/working_set_helpers.zig": "a534fc7076cbda3dfc4a49de65552cb89b23d37a68a4438dea6dd022b5d2ea30",
+    "scaffold/working_set_helpers.zig": "0a15472c57dcdc6f1f33468cbfc7f99af9faf8963be11b93db3f424bbbec7e42",
     "tools/acquire-parent.mjs": "efbf89b65e47486fd99a44f57d0397f76215238bd483560de9f05df489e8abab",
     "tools/build-release.mjs": "afdafcc00df89afbc745eaf242993bf5980d00942a2a3e716576676ba03e0dff",
     "tools/check-artifacts.mjs": "fcdf2331830abebe64aabb7fef89160017c3823c1ea6ed8fcac06c1939bdbfcb",
@@ -138,5 +142,5 @@
   "parentLockSha256": "119bdce20f6b7bae74d341e2c0317898048f5ae8cd1a242aa920e4362c3c8f62",
   "childStackLockSha256": "7a162c566a920795e53e6680e23967d6cf3e3e3c64dda1bbd37b68bc1fc118dd",
   "birthBriefSha256": "9ee3f7f6377cfc77eb0cffdd767d4ab4c28618693ed114afce9a8b9a860cfc5c",
-  "birthPolicySha256": "c97dad188058d692dc1fedb41bde23823ed4c6106918b2efb6dc302b8afe313e"
+  "birthPolicySha256": "aae5d4ccb30dc2481efb33579a317e497260d64c6d3bc563db5b67d9fc3e8ac7"
 }
