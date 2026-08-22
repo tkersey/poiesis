@@ -20,6 +20,8 @@ const source = acquired.roots[lock.assets.find((asset) => asset.name.endsWith("-
 const runtime = acquired.roots[lock.assets.find((asset) => asset.name.endsWith("-runtime.tar.gz")).name];
 const artifacts = acquired.roots[lock.assets.find((asset) => asset.name.endsWith("-artifacts.tar.gz")).name];
 const parentCorrection = JSON.parse(await readFile(join(source, "conformance/praxis-v1.0.7/obstructions/poiesis-r13-machine-fuel/result.json"), "utf8"));
+assert.equal(obstruction.format, "poiesis-obstruction/v1");
+assert.equal(parentCorrection.format, "praxis-obstruction-correction/v1");
 assert.deepEqual(Object.keys(obstruction).sort(), [
   "application_abi", "applied_replacements", "effect_count", "effect_protocol",
   "failed_live_receipt_sha256", "failed_parent_definition_sha256", "failed_parent_release",
