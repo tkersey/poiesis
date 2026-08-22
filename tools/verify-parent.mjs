@@ -15,9 +15,40 @@ const sha256 = (bytes) => createHash("sha256").update(bytes).digest("hex");
 const lock = JSON.parse(await readFile(new URL("../conformance/poiesis-v1/parent.lock.json", import.meta.url), "utf8"));
 const child = JSON.parse(await readFile(new URL("../conformance/poiesis-v1/child-stack.lock.json", import.meta.url), "utf8"));
 const acquired = await acquireParent({ root: resolve(".poiesis/parent") });
+const obstruction = JSON.parse(await readFile(new URL("../conformance/poiesis-v1/obstructions/release-steward-birth-v106-machine-fuel/result.json", import.meta.url), "utf8"));
 const source = acquired.roots[lock.assets.find((asset) => asset.name.endsWith("-source.tar.gz")).name];
 const runtime = acquired.roots[lock.assets.find((asset) => asset.name.endsWith("-runtime.tar.gz")).name];
 const artifacts = acquired.roots[lock.assets.find((asset) => asset.name.endsWith("-artifacts.tar.gz")).name];
+
+function git(args) {
+  const result = Bun.spawnSync(["git", ...args], { cwd: acquired.roots.runner, stdout: "pipe", stderr: "pipe" });
+  if (result.error || result.exitCode !== 0) throw new Error(`parent Git verification failed: git ${args.join(" ")}`);
+  return Buffer.from(result.stdout);
+}
+
+function maximumMachineFuel(definitionBytes, expectedVersion) {
+  const source = new TextDecoder("utf-8", { fatal: true }).decode(definitionBytes);
+  const versions = [...source.matchAll(/\.version = "([0-9]+\.[0-9]+\.[0-9]+)"/g)];
+  const fuels = [...source.matchAll(/\.maximum_machine_fuel = ([0-9_]+),/g)];
+  assert.equal(versions.length, 1);
+  assert.equal(versions[0][1], expectedVersion);
+  assert.equal(fuels.length, 1);
+  return Number(fuels[0][1].replaceAll("_", ""));
+}
+
+assert.equal(obstruction.failed_parent_release, "v1.0.6");
+assert.equal(obstruction.successor_parent_release, lock.release.tag);
+assert.equal(obstruction.successor_parent_tag_commit, lock.release.tagCommit);
+assert.equal(obstruction.successor_parent_definition_sha256, lock.release.definitionSha256);
+git(["merge-base", "--is-ancestor", obstruction.failed_parent_tag_commit, lock.release.tagCommit]);
+const failedDefinitionBytes = git(["show", `${obstruction.failed_parent_tag_commit}:src/definition.zig`]);
+const successorDefinitionBytes = git(["show", `${lock.release.tagCommit}:src/definition.zig`]);
+assert.equal(sha256(failedDefinitionBytes), obstruction.failed_parent_definition_sha256);
+assert.equal(sha256(successorDefinitionBytes), lock.release.definitionSha256);
+const failedMaximumMachineFuel = maximumMachineFuel(failedDefinitionBytes, obstruction.failed_parent_release.slice(1));
+const successorMaximumMachineFuel = maximumMachineFuel(successorDefinitionBytes, lock.release.tag.slice(1));
+assert.equal(failedMaximumMachineFuel, obstruction.failed_total_machine_fuel);
+assert.equal(successorMaximumMachineFuel, obstruction.successor_total_machine_fuel);
 
 const releaseVersion = lock.release.tag.slice(1);
 const archivedCandidateBytes = await readFile(join(source, `conformance/praxis-v${releaseVersion}/candidate.json`));
@@ -120,4 +151,6 @@ process.stdout.write(`parent_candidate_commit=${candidate.praxisCommit}\n`);
 process.stdout.write(`parent_archived_candidate_commit=${archivedCandidate.praxisCommit}\n`);
 process.stdout.write(`parent_candidate_json_sha256=${sha256(releaseCandidateBytes)}\n`);
 process.stdout.write(`parent_application_id=${candidate.applicationId}\nparent_wasm_sha256=${candidate.applicationWasmSha256}\nparent_verified=true\n`);
+process.stdout.write(`failed_parent_definition_sha256=${sha256(failedDefinitionBytes)}\nfailed_parent_maximum_machine_fuel=${failedMaximumMachineFuel}\n`);
+process.stdout.write(`parent_definition_sha256=${sha256(successorDefinitionBytes)}\nparent_maximum_machine_fuel=${successorMaximumMachineFuel}\n`);
 process.stdout.write("parent_runner_verified=true\n");

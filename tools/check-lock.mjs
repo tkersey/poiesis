@@ -25,6 +25,7 @@ assert.deepEqual(parent.release, {
   repository: "tkersey/praxis", tag: "v1.0.7", tagCommit: "cbfe0d0fd3aba11d857af89baf82874e83337c3b",
   candidateCommit: "cbfe0d0fd3aba11d857af89baf82874e83337c3b",
   archivedCandidateCommit: "4563327dcf1a39071e6c4747e7e50b0c75ee8659",
+  definitionSha256: "38739fbd4468784fbe53054d687da61bba24f3b1056a923d9422cea2f04cb970",
   applicationId: "6dcf6911c610b85ebd8c90d87ad95ed868107fc9960657ffff4f1e4c2df1e038",
   applicationWasmSha256: "a574c10abfbb32190405e47848e1dd924cc8dde72af0a4ea8a88539dc36a3ba1",
   decisionContractDigest: "52dd0677dfa232923d47a8f563dd2ab4b4fb456a5d0d0a6e3cb697a3b7d0e114",
