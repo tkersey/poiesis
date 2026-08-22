@@ -17,6 +17,8 @@ const child = JSON.parse(await readFile(new URL("../conformance/poiesis-v1/child
 const acquired = await acquireParent({ root: resolve(".poiesis/parent") });
 const repositoryRoot = fileURLToPath(new URL("../", import.meta.url));
 const obstruction = JSON.parse(await readFile(new URL("../conformance/poiesis-v1/obstructions/release-steward-birth-v106-machine-fuel/result.json", import.meta.url), "utf8"));
+const failedReceiptBytes = await readFile(new URL("../conformance/poiesis-v1/obstructions/release-steward-birth-v106-machine-fuel/reproducer/birth.live.redacted.json", import.meta.url));
+const failedReceipt = JSON.parse(failedReceiptBytes);
 const source = acquired.roots[lock.assets.find((asset) => asset.name.endsWith("-source.tar.gz")).name];
 const runtime = acquired.roots[lock.assets.find((asset) => asset.name.endsWith("-runtime.tar.gz")).name];
 const artifacts = acquired.roots[lock.assets.find((asset) => asset.name.endsWith("-artifacts.tar.gz")).name];
@@ -41,6 +43,24 @@ assert.deepEqual(Object.keys(parentCorrection).sort(), [
   "machine_abi", "machine_state", "maximum_changed_files", "maximum_decisions",
   "maximum_effect_actions", "maximum_mutation_operations", "owner", "successor_total_machine_fuel",
 ].sort());
+assert.deepEqual(Object.keys(failedReceipt).sort(), [
+  "application_id", "base_revision", "candidate_commit", "external_effect_count",
+  "failure_class", "mode", "openai_api_key_recorded", "ordered_interfaces",
+  "praxis_format", "raw_model_output_recorded", "raw_prompt_recorded",
+  "raw_repository_content_recorded", "repository", "run_id_sha256", "terminal_status",
+].sort());
+assert.equal(sha256(failedReceiptBytes), obstruction.failed_live_receipt_sha256);
+assert.equal(failedReceipt.praxis_format, 1);
+assert.equal(failedReceipt.mode, "live-failure");
+assert.equal(failedReceipt.candidate_commit, lock.predecessorRelease.tagCommit);
+assert.equal(failedReceipt.repository, "tkersey/poiesis");
+assert.equal(failedReceipt.base_revision, obstruction.failed_scaffold_commit);
+assert.equal(failedReceipt.terminal_status, 2);
+assert.equal(failedReceipt.external_effect_count, obstruction.effect_count);
+assert.equal(failedReceipt.ordered_interfaces.length, obstruction.effect_count);
+assert.equal(failedReceipt.ordered_interfaces.filter((name) => name === "repo.replace.approved.v2").length, obstruction.applied_replacements);
+assert.equal(failedReceipt.ordered_interfaces.at(-1), "repo.replace.approved.v2");
+for (const field of ["raw_prompt_recorded", "raw_repository_content_recorded", "raw_model_output_recorded", "openai_api_key_recorded"]) assert.equal(failedReceipt[field], false);
 
 function git(args) {
   const result = Bun.spawnSync(["git", ...args], { cwd: acquired.roots.runner, stdout: "pipe", stderr: "pipe" });
