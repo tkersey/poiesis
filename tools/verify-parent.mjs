@@ -19,6 +19,7 @@ const obstruction = JSON.parse(await readFile(new URL("../conformance/poiesis-v1
 const source = acquired.roots[lock.assets.find((asset) => asset.name.endsWith("-source.tar.gz")).name];
 const runtime = acquired.roots[lock.assets.find((asset) => asset.name.endsWith("-runtime.tar.gz")).name];
 const artifacts = acquired.roots[lock.assets.find((asset) => asset.name.endsWith("-artifacts.tar.gz")).name];
+const parentCorrection = JSON.parse(await readFile(join(source, "conformance/praxis-v1.0.7/obstructions/poiesis-r13-machine-fuel/result.json"), "utf8"));
 
 function git(args) {
   const result = Bun.spawnSync(["git", ...args], { cwd: acquired.roots.runner, stdout: "pipe", stderr: "pipe" });
@@ -36,11 +37,14 @@ function maximumMachineFuel(definitionBytes, expectedVersion) {
   return Number(fuels[0][1].replaceAll("_", ""));
 }
 
-assert.equal(obstruction.failed_parent_release, "v1.0.6");
+assert.equal(obstruction.failed_parent_release, lock.predecessorRelease.tag);
+assert.equal(obstruction.failed_parent_tag_commit, lock.predecessorRelease.tagCommit);
 assert.equal(obstruction.successor_parent_release, lock.release.tag);
 assert.equal(obstruction.successor_parent_tag_commit, lock.release.tagCommit);
 assert.equal(obstruction.successor_parent_definition_sha256, lock.release.definitionSha256);
-git(["merge-base", "--is-ancestor", obstruction.failed_parent_tag_commit, lock.release.tagCommit]);
+assert.equal(git(["rev-parse", `${lock.predecessorRelease.tag}^{commit}`]).toString("utf8").trim(), lock.predecessorRelease.tagCommit);
+assert.equal(git(["rev-parse", `${lock.release.tag}^{commit}`]).toString("utf8").trim(), lock.release.tagCommit);
+git(["merge-base", "--is-ancestor", lock.predecessorRelease.tagCommit, lock.release.tagCommit]);
 const failedDefinitionBytes = git(["show", `${obstruction.failed_parent_tag_commit}:src/definition.zig`]);
 const successorDefinitionBytes = git(["show", `${lock.release.tagCommit}:src/definition.zig`]);
 assert.equal(sha256(failedDefinitionBytes), obstruction.failed_parent_definition_sha256);
@@ -49,6 +53,51 @@ const failedMaximumMachineFuel = maximumMachineFuel(failedDefinitionBytes, obstr
 const successorMaximumMachineFuel = maximumMachineFuel(successorDefinitionBytes, lock.release.tag.slice(1));
 assert.equal(failedMaximumMachineFuel, obstruction.failed_total_machine_fuel);
 assert.equal(successorMaximumMachineFuel, obstruction.successor_total_machine_fuel);
+assert.deepEqual({
+  owner: obstruction.owner,
+  failed_release: obstruction.failed_parent_release,
+  failed_scaffold_commit: obstruction.failed_scaffold_commit,
+  failed_receipt_sha256: obstruction.failed_live_receipt_sha256,
+  failed_terminal_frame_id: obstruction.failed_terminal_frame_id,
+  failed_terminal_failure: obstruction.failure,
+  failed_total_machine_fuel: obstruction.failed_total_machine_fuel,
+  successor_total_machine_fuel: obstruction.successor_total_machine_fuel,
+  failure_external_effect_count: obstruction.effect_count,
+  failure_applied_replacements: obstruction.applied_replacements,
+  failure_generated_epistemics_bytes: obstruction.generated_epistemics_bytes,
+  failure_model_authored_abort: obstruction.model_authored_abort,
+  maximum_decisions: obstruction.maximum_decisions,
+  maximum_effect_actions: obstruction.maximum_effect_actions,
+  maximum_mutation_operations: obstruction.maximum_mutation_operations,
+  maximum_changed_files: obstruction.maximum_changed_files,
+  machine_abi: obstruction.machine_abi,
+  machine_state: obstruction.machine_state,
+  application_abi: obstruction.application_abi,
+  frame: obstruction.frame,
+  effect_protocol: obstruction.effect_protocol,
+}, {
+  owner: parentCorrection.owner,
+  failed_release: parentCorrection.failed_release,
+  failed_scaffold_commit: parentCorrection.failed_scaffold_commit,
+  failed_receipt_sha256: parentCorrection.failed_receipt_sha256,
+  failed_terminal_frame_id: parentCorrection.failed_terminal_frame_id,
+  failed_terminal_failure: parentCorrection.failed_terminal_failure,
+  failed_total_machine_fuel: parentCorrection.failed_total_machine_fuel,
+  successor_total_machine_fuel: parentCorrection.successor_total_machine_fuel,
+  failure_external_effect_count: parentCorrection.failure_external_effect_count,
+  failure_applied_replacements: parentCorrection.failure_applied_replacements,
+  failure_generated_epistemics_bytes: parentCorrection.failure_generated_epistemics_bytes,
+  failure_model_authored_abort: parentCorrection.failure_model_authored_abort,
+  maximum_decisions: parentCorrection.maximum_decisions,
+  maximum_effect_actions: parentCorrection.maximum_effect_actions,
+  maximum_mutation_operations: parentCorrection.maximum_mutation_operations,
+  maximum_changed_files: parentCorrection.maximum_changed_files,
+  machine_abi: parentCorrection.machine_abi,
+  machine_state: parentCorrection.machine_state,
+  application_abi: parentCorrection.application_abi,
+  frame: parentCorrection.frame,
+  effect_protocol: parentCorrection.effect_protocol,
+});
 
 const releaseVersion = lock.release.tag.slice(1);
 const archivedCandidateBytes = await readFile(join(source, `conformance/praxis-v${releaseVersion}/candidate.json`));

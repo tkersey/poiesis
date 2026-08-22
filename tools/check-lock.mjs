@@ -35,6 +35,10 @@ assert.deepEqual(parent.release, {
   codecsSha256: "f73c15ee12a37b12000a5c9f1a4e9ff45ee72f2d80dee4cc789f696188a42510",
   sourceManifestSha256: "f8ea4b1f8a56d5b6c0d8c0a4593bc5b79743235ee4d9f65b1ed122cf3e4fefcb",
 });
+assert.deepEqual(parent.predecessorRelease, {
+  tag: "v1.0.6",
+  tagCommit: "58c1f28cb8087d6a1a284aa25e587c93b7e420e2",
+});
 
 assert.deepEqual(parent.assets.map((asset) => asset.name), [
   "praxis-v1.0.7-artifacts.tar.gz",
