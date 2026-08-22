@@ -10,6 +10,7 @@ assert.deepEqual(Object.keys(result).sort(), [
   "application_abi", "applied_replacements", "effect_count", "effect_protocol",
   "failed_live_receipt_sha256", "failed_parent_definition_sha256", "failed_parent_release",
   "failed_parent_tag_commit", "failed_scaffold_commit", "failed_terminal_frame_id",
+  "failed_terminal_frame_block_sha256",
   "failed_total_machine_fuel", "failure", "format", "frame", "generated_epistemics_bytes",
   "machine_abi", "machine_state", "maximum_changed_files", "maximum_decisions",
   "maximum_effect_actions", "maximum_mutation_operations", "model_authored_abort", "owner",

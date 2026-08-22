@@ -1,0 +1,84 @@
+{
+  "format": "poiesis-approval-projection/v1",
+  "run_id_sha256": "36a29b8c12939ce8c1b60716a95330b266898a619a93b63c00935a03f00dbb08",
+  "approvals": [
+    {
+      "applicationId": "d9c7744e1ec5e662ff3830dc2d505b4a5777c89cdac8a29d2d8a9da341701ca5",
+      "approved": true,
+      "expectedSha256": "04c0f4745c2edded33e7051c2adfdcc710771f2a2a2e35641ca6ee3d0a296ee3",
+      "format": "praxis-approval/v1",
+      "mode": "receiver-policy-verified",
+      "path": "src/generated_epistemics.zig",
+      "policyDigest": "8a5b96bef88c7bea0fea49fb9f98bbe96171f86627c945ce4f766f6b42e47968",
+      "proposalDigest": "0a04c4eaca6a75778338f3a7d9b8fdd66b418b81a3b002758fae973fd8c07370",
+      "replacementSha256": "2dd293620a7c26417f5e5028f40e04950459a9382a092a83d5e1c0e32616099f",
+      "requestId": "00816f2e7885636efe1ce969ce57f15791639ad4ab838267f63f57e4c4270e22",
+      "sourceSha256": "21359fa3deabcaefbe7346a5d929e3f9f3a6e8fa86f5917c6c8a7f0a8c62fb43"
+    },
+    {
+      "applicationId": "d9c7744e1ec5e662ff3830dc2d505b4a5777c89cdac8a29d2d8a9da341701ca5",
+      "approved": true,
+      "expectedSha256": "1e36864ebfb75896a57bd0f21296fe782233ace57745e8e326426e6f801d3b2e",
+      "format": "praxis-approval/v1",
+      "mode": "receiver-policy-verified",
+      "path": "src/generated_epistemics.zig",
+      "policyDigest": "8a5b96bef88c7bea0fea49fb9f98bbe96171f86627c945ce4f766f6b42e47968",
+      "proposalDigest": "11bb1ba45124ec3085b35dab5f50498944d6a63cac369c2958d57afe0b548402",
+      "replacementSha256": "3c05292cd64c520cd909fe7bdbe5099995b785f9820c7c37f54634cae2ef69b8",
+      "requestId": "3ac97a0d2f539a0c95e9f8399d313bf32837162dc58d04677b67b7a367fb65db",
+      "sourceSha256": "4fbcabcf3a33f5373d7de727bc402f2c2c32ad85de3277f77834e325d7ed021d"
+    },
+    {
+      "applicationId": "d9c7744e1ec5e662ff3830dc2d505b4a5777c89cdac8a29d2d8a9da341701ca5",
+      "approved": true,
+      "expectedSha256": "dff0287568675ab0c45f742ced6ad370fdc021176200cdcc96091ee387c6900f",
+      "format": "praxis-approval/v1",
+      "mode": "receiver-policy-verified",
+      "path": "src/generated_policy.zig",
+      "policyDigest": "8a5b96bef88c7bea0fea49fb9f98bbe96171f86627c945ce4f766f6b42e47968",
+      "proposalDigest": "0a46cb483f16238c9b76b40b1c764ea8ebd01cb8349181392abb40819fe58dd0",
+      "replacementSha256": "366b6c71e15b2ea11f2cf940556a3a1a986b4e7870ef43fc16b0261fae632084",
+      "requestId": "4355f65ec698cec71a2f75cf5072bf2cf8a72033728bf2a86c1d284b6b2e9078",
+      "sourceSha256": "3a059a64f52fda7db2c4c88bd71e3c55c100f866a562ee1f350559512009aaf2"
+    },
+    {
+      "applicationId": "d9c7744e1ec5e662ff3830dc2d505b4a5777c89cdac8a29d2d8a9da341701ca5",
+      "approved": true,
+      "expectedSha256": "2dd293620a7c26417f5e5028f40e04950459a9382a092a83d5e1c0e32616099f",
+      "format": "praxis-approval/v1",
+      "mode": "receiver-policy-verified",
+      "path": "src/generated_epistemics.zig",
+      "policyDigest": "8a5b96bef88c7bea0fea49fb9f98bbe96171f86627c945ce4f766f6b42e47968",
+      "proposalDigest": "64b2c97003d84e97ad389e8cf6982fdea0440f38cea40491ed4c4c08ec4b481f",
+      "replacementSha256": "04c0f4745c2edded33e7051c2adfdcc710771f2a2a2e35641ca6ee3d0a296ee3",
+      "requestId": "e2c8a1e8d4b1aef5733a01456ed9426298511b71fdc6e102273ba7be77c4e694",
+      "sourceSha256": "6b61fd42a1b8537ade6ffadabd98f92c1f3075dfd5f193a06d381dd966b4acd7"
+    },
+    {
+      "applicationId": "d9c7744e1ec5e662ff3830dc2d505b4a5777c89cdac8a29d2d8a9da341701ca5",
+      "approved": true,
+      "expectedSha256": "3c05292cd64c520cd909fe7bdbe5099995b785f9820c7c37f54634cae2ef69b8",
+      "format": "praxis-approval/v1",
+      "mode": "receiver-policy-verified",
+      "path": "src/generated_epistemics.zig",
+      "policyDigest": "8a5b96bef88c7bea0fea49fb9f98bbe96171f86627c945ce4f766f6b42e47968",
+      "proposalDigest": "d142b9fa12cedf76e9f20320e66e97439da7d2e96495a5aa5ca3658ce9a1491b",
+      "replacementSha256": "2dd293620a7c26417f5e5028f40e04950459a9382a092a83d5e1c0e32616099f",
+      "requestId": "eedbecf3cc097f91ca02377f2aeb526c8c03203c6983ad38d99c82d162fe5420",
+      "sourceSha256": "cc78c647b1864ab4c118cf4831a7abfea2dbbe11e42e9990a46be7cf98937643"
+    },
+    {
+      "applicationId": "d9c7744e1ec5e662ff3830dc2d505b4a5777c89cdac8a29d2d8a9da341701ca5",
+      "approved": true,
+      "expectedSha256": "2dd293620a7c26417f5e5028f40e04950459a9382a092a83d5e1c0e32616099f",
+      "format": "praxis-approval/v1",
+      "mode": "receiver-policy-verified",
+      "path": "src/generated_epistemics.zig",
+      "policyDigest": "8a5b96bef88c7bea0fea49fb9f98bbe96171f86627c945ce4f766f6b42e47968",
+      "proposalDigest": "54d28480f4e92af816a925b5ccc699167ec0a219162ff8145e0b449e15eee390",
+      "replacementSha256": "04c0f4745c2edded33e7051c2adfdcc710771f2a2a2e35641ca6ee3d0a296ee3",
+      "requestId": "ff220ffc41dae3f3ad27eaba9e09fc775dc0e8d2b83144376cbc7bcde9798fe8",
+      "sourceSha256": "44709b90d67a9faa6c3d3fa91421b9faa08ec53a81bd83c5a8b6f8660c7cf2e9"
+    }
+  ]
+}

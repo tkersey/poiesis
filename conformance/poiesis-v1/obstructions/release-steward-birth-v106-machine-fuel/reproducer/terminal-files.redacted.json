@@ -1,0 +1,15 @@
+{
+  "format": "poiesis-terminal-files-projection/v1",
+  "files": [
+    {
+      "path": "src/generated_epistemics.zig",
+      "sha256": "04c0f4745c2edded33e7051c2adfdcc710771f2a2a2e35641ca6ee3d0a296ee3",
+      "size_bytes": 14559
+    },
+    {
+      "path": "src/generated_policy.zig",
+      "sha256": "366b6c71e15b2ea11f2cf940556a3a1a986b4e7870ef43fc16b0261fae632084",
+      "size_bytes": 3138
+    }
+  ]
+}

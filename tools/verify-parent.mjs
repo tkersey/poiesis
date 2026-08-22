@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
-import { readFile, readdir } from "node:fs/promises";
+import { readFile } from "node:fs/promises";
 import { join, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { acquireParent } from "./acquire-parent.mjs";
@@ -19,10 +19,14 @@ const repositoryRoot = fileURLToPath(new URL("../", import.meta.url));
 const obstruction = JSON.parse(await readFile(new URL("../conformance/poiesis-v1/obstructions/release-steward-birth-v106-machine-fuel/result.json", import.meta.url), "utf8"));
 const failedReceiptBytes = await readFile(new URL("../conformance/poiesis-v1/obstructions/release-steward-birth-v106-machine-fuel/reproducer/birth.live.redacted.json", import.meta.url));
 const failedReceipt = JSON.parse(failedReceiptBytes);
-const approvalsRoot = new URL("../conformance/poiesis-v1/obstructions/release-steward-birth-v106-machine-fuel/reproducer/approvals/", import.meta.url);
+const approvalProjectionBytes = await readFile(new URL("../conformance/poiesis-v1/obstructions/release-steward-birth-v106-machine-fuel/reproducer/approvals.redacted.json", import.meta.url));
+const approvalProjection = JSON.parse(approvalProjectionBytes);
+const terminalFiles = JSON.parse(await readFile(new URL("../conformance/poiesis-v1/obstructions/release-steward-birth-v106-machine-fuel/reproducer/terminal-files.redacted.json", import.meta.url), "utf8"));
+const terminalFrameHex = (await readFile(new URL("../conformance/poiesis-v1/obstructions/release-steward-birth-v106-machine-fuel/reproducer/terminal-frame.hex", import.meta.url), "utf8")).trim();
 const source = acquired.roots[lock.assets.find((asset) => asset.name.endsWith("-source.tar.gz")).name];
 const runtime = acquired.roots[lock.assets.find((asset) => asset.name.endsWith("-runtime.tar.gz")).name];
 const artifacts = acquired.roots[lock.assets.find((asset) => asset.name.endsWith("-artifacts.tar.gz")).name];
+const worldHost = await import(pathToFileURL(join(acquired.roots.worldHost, "src/v1/index.mjs")).href);
 const parentCorrection = JSON.parse(await readFile(join(source, "conformance/praxis-v1.0.7/obstructions/poiesis-r13-machine-fuel/result.json"), "utf8"));
 assert.equal(obstruction.format, "poiesis-obstruction/v1");
 assert.equal(parentCorrection.format, "praxis-obstruction-correction/v1");
@@ -30,6 +34,7 @@ assert.deepEqual(Object.keys(obstruction).sort(), [
   "application_abi", "applied_replacements", "effect_count", "effect_protocol",
   "failed_live_receipt_sha256", "failed_parent_definition_sha256", "failed_parent_release",
   "failed_parent_tag_commit", "failed_scaffold_commit", "failed_terminal_frame_id",
+  "failed_terminal_frame_block_sha256",
   "failed_total_machine_fuel", "failure", "format", "frame", "generated_epistemics_bytes",
   "machine_abi", "machine_state", "maximum_changed_files", "maximum_decisions",
   "maximum_effect_actions", "maximum_mutation_operations", "model_authored_abort", "owner",
@@ -63,28 +68,24 @@ assert.equal(failedReceipt.base_revision, obstruction.failed_scaffold_commit);
 assert.equal(failedReceipt.terminal_status, 2);
 assert.equal(failedReceipt.external_effect_count, obstruction.effect_count);
 assert.equal(failedReceipt.ordered_interfaces.length, obstruction.effect_count);
-const approvalNames = (await readdir(approvalsRoot)).sort();
-assert.equal(approvalNames.length, obstruction.applied_replacements);
-assert.ok(approvalNames.every((name) => /^[0-9a-f]{64}\.json$/.test(name)));
-const approvals = [];
-for (const name of approvalNames) {
-  const approval = JSON.parse(await readFile(new URL(name, approvalsRoot)));
+assert.deepEqual(Object.keys(approvalProjection).sort(), ["approvals", "format", "run_id_sha256"]);
+assert.equal(approvalProjection.format, "poiesis-approval-projection/v1");
+assert.equal(approvalProjection.run_id_sha256, failedReceipt.run_id_sha256);
+const approvals = approvalProjection.approvals;
+assert.equal(approvals.length, obstruction.applied_replacements);
+for (const approval of approvals) {
   assert.deepEqual(Object.keys(approval).sort(), [
     "applicationId", "approved", "expectedSha256", "format", "mode", "path",
-    "policyDigest", "proposalDigest", "replacementSha256", "requestId", "runId",
+    "policyDigest", "proposalDigest", "replacementSha256", "requestId", "sourceSha256",
   ].sort());
   assert.equal(approval.format, "praxis-approval/v1");
-  assert.equal(approval.requestId, name.slice(0, -5));
   assert.equal(approval.applicationId, lock.predecessorRelease.applicationId);
   assert.equal(approval.approved, true);
   assert.equal(approval.mode, "receiver-policy-verified");
-  for (const field of ["policyDigest", "proposalDigest", "expectedSha256", "replacementSha256"]) assert.match(approval[field], /^[0-9a-f]{64}$/);
-  approvals.push(approval);
+  for (const field of ["policyDigest", "proposalDigest", "expectedSha256", "replacementSha256", "requestId", "sourceSha256"]) assert.match(approval[field], /^[0-9a-f]{64}$/);
 }
 assert.equal(new Set(approvals.map((approval) => approval.requestId)).size, approvals.length);
 assert.equal(new Set(approvals.map((approval) => approval.proposalDigest)).size, approvals.length);
-assert.equal(new Set(approvals.map((approval) => approval.runId)).size, 1);
-assert.equal(sha256(Buffer.from(approvals[0].runId, "utf8")), failedReceipt.run_id_sha256);
 const failedScaffoldEvidenceCommit = "b15281ff26c585752856694c48a73eab669e72c7";
 assert.equal(poiesisGit(["rev-parse", `${failedScaffoldEvidenceCommit}^`]).toString("utf8").trim(), obstruction.failed_scaffold_commit);
 const failedScaffoldLock = JSON.parse(poiesisGit(["show", `${failedScaffoldEvidenceCommit}:conformance/poiesis-v1/scaffold.lock.json`]));
@@ -93,12 +94,31 @@ assert.equal(failedScaffoldLock.baselineCommit, obstruction.failed_scaffold_comm
 assert.equal(new Set(approvals.map((approval) => approval.policyDigest)).size, 1);
 assert.equal(approvals[0].policyDigest, failedScaffoldLock.birthPolicySha256);
 assert.equal(failedReceipt.ordered_interfaces.filter((name) => name === "repo.replace.approved.v2").length, approvals.length);
+assert.equal(terminalFiles.format, "poiesis-terminal-files-projection/v1");
+assert.deepEqual(Object.keys(terminalFiles).sort(), ["files", "format"]);
+assert.equal(terminalFiles.files.length, 2);
 for (const path of new Set(approvals.map((approval) => approval.path))) {
   const pathApprovals = approvals.filter((approval) => approval.path === path);
   const baselineDigest = sha256(poiesisGit(["show", `poiesis-v1-scaffold-r13:${path}`]));
-  assert.equal(consumesEveryApproval(baselineDigest, pathApprovals), true, `approval chain is discontinuous: ${path}`);
+  const terminal = terminalFiles.files.find((file) => file.path === path);
+  assert.ok(terminal);
+  assert.deepEqual(Object.keys(terminal).sort(), ["path", "sha256", "size_bytes"]);
+  assert.match(terminal.sha256, /^[0-9a-f]{64}$/);
+  assert.ok(Number.isSafeInteger(terminal.size_bytes) && terminal.size_bytes > 0 && terminal.size_bytes <= 16 * 1024);
+  assert.equal(terminalDigests(baselineDigest, pathApprovals).has(terminal.sha256), true, `approval chain is discontinuous: ${path}`);
 }
+assert.equal(terminalFiles.files.find((file) => file.path === "src/generated_epistemics.zig").size_bytes, obstruction.generated_epistemics_bytes);
 assert.equal(failedReceipt.ordered_interfaces.at(-1), "repo.replace.approved.v2");
+assert.match(terminalFrameHex, /^[0-9a-f]+$/);
+assert.equal(terminalFrameHex.length % 2, 0);
+const terminalFrameBytes = Buffer.from(terminalFrameHex, "hex");
+assert.equal(sha256(terminalFrameBytes), obstruction.failed_terminal_frame_block_sha256);
+const terminalFrame = worldHost.decodeFrame(terminalFrameBytes);
+assert.equal(Buffer.from(terminalFrame.frameId).toString("hex"), obstruction.failed_terminal_frame_id);
+assert.equal(Buffer.from(terminalFrame.applicationId).toString("hex"), lock.predecessorRelease.applicationId);
+assert.equal(terminalFrame.sequence, BigInt(obstruction.effect_count));
+assert.equal(terminalFrame.status, worldHost.FrameStatus.failed);
+assert.equal(new TextDecoder("utf-8", { fatal: true }).decode(terminalFrame.failure), obstruction.failure);
 for (const field of ["raw_prompt_recorded", "raw_repository_content_recorded", "raw_model_output_recorded", "openai_api_key_recorded"]) assert.equal(failedReceipt[field], false);
 
 function git(args) {
@@ -123,14 +143,15 @@ function maximumMachineFuel(definitionBytes, expectedVersion) {
   return Number(fuels[0][1].replaceAll("_", ""));
 }
 
-function consumesEveryApproval(currentDigest, approvals, used = new Set()) {
-  if (used.size === approvals.length) return true;
+function terminalDigests(currentDigest, approvals, used = new Set()) {
+  if (used.size === approvals.length) return new Set([currentDigest]);
+  const results = new Set();
   for (let index = 0; index < approvals.length; index += 1) {
     if (used.has(index) || approvals[index].expectedSha256 !== currentDigest) continue;
     const next = new Set(used); next.add(index);
-    if (consumesEveryApproval(approvals[index].replacementSha256, approvals, next)) return true;
+    for (const digest of terminalDigests(approvals[index].replacementSha256, approvals, next)) results.add(digest);
   }
-  return false;
+  return results;
 }
 
 assert.equal(obstruction.failed_parent_release, lock.predecessorRelease.tag);

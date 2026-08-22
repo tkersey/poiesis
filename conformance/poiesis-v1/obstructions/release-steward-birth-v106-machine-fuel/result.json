@@ -7,6 +7,7 @@
   "failed_scaffold_commit": "73c1cf703d22acbb91733806ab50e4f5bed7de11",
   "failed_live_receipt_sha256": "6a49c983cf4e4c9d7c3f9eedd0fb04413cec3e034c347bdf3d27d7d16f82ac46",
   "failed_terminal_frame_id": "d44b54508f73f3484e34b2cf632877bc5b4d68a5f80a9d0fcbb2880e5f5a73f3",
+  "failed_terminal_frame_block_sha256": "e6f742050f2d0a14839bda086dd10ef04d55ba9c724f836135e6192470f07ec6",
   "failure": "Boundary Machine execution budget exceeded",
   "effect_count": 58,
   "applied_replacements": 6,
