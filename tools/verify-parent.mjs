@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { join, resolve } from "node:path";
-import { pathToFileURL } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import { acquireParent } from "./acquire-parent.mjs";
 
 for (const name of ["GIT_DIR", "GIT_WORK_TREE", "GIT_INDEX_FILE", "GIT_OBJECT_DIRECTORY", "GIT_ALTERNATE_OBJECT_DIRECTORIES", "GIT_REPLACE_REF_BASE"]) delete process.env[name];
@@ -15,6 +15,7 @@ const sha256 = (bytes) => createHash("sha256").update(bytes).digest("hex");
 const lock = JSON.parse(await readFile(new URL("../conformance/poiesis-v1/parent.lock.json", import.meta.url), "utf8"));
 const child = JSON.parse(await readFile(new URL("../conformance/poiesis-v1/child-stack.lock.json", import.meta.url), "utf8"));
 const acquired = await acquireParent({ root: resolve(".poiesis/parent") });
+const repositoryRoot = fileURLToPath(new URL("../", import.meta.url));
 const obstruction = JSON.parse(await readFile(new URL("../conformance/poiesis-v1/obstructions/release-steward-birth-v106-machine-fuel/result.json", import.meta.url), "utf8"));
 const source = acquired.roots[lock.assets.find((asset) => asset.name.endsWith("-source.tar.gz")).name];
 const runtime = acquired.roots[lock.assets.find((asset) => asset.name.endsWith("-runtime.tar.gz")).name];
@@ -47,6 +48,12 @@ function git(args) {
   return Buffer.from(result.stdout);
 }
 
+function poiesisGit(args) {
+  const result = Bun.spawnSync(["git", ...args], { cwd: repositoryRoot, stdout: "pipe", stderr: "pipe" });
+  if (result.error || result.exitCode !== 0) throw new Error(`Poiesis Git verification failed: git ${args.join(" ")}`);
+  return Buffer.from(result.stdout);
+}
+
 function maximumMachineFuel(definitionBytes, expectedVersion) {
   const source = new TextDecoder("utf-8", { fatal: true }).decode(definitionBytes);
   const versions = [...source.matchAll(/\.version = "([0-9]+\.[0-9]+\.[0-9]+)"/g)];
@@ -58,6 +65,7 @@ function maximumMachineFuel(definitionBytes, expectedVersion) {
 }
 
 assert.equal(obstruction.failed_parent_release, lock.predecessorRelease.tag);
+assert.equal(poiesisGit(["rev-parse", "poiesis-v1-scaffold-r13^{commit}"]).toString("utf8").trim(), obstruction.failed_scaffold_commit);
 assert.equal(obstruction.failed_parent_tag_commit, lock.predecessorRelease.tagCommit);
 assert.equal(obstruction.successor_parent_release, lock.release.tag);
 assert.equal(obstruction.successor_parent_tag_commit, lock.release.tagCommit);
