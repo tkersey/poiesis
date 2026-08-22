@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
 import { readFile } from "node:fs/promises";
+import { fileURLToPath } from "node:url";
 
 const result = JSON.parse(await readFile(new URL("../result.json", import.meta.url), "utf8"));
 const parent = JSON.parse(await readFile(new URL("../../../parent.lock.json", import.meta.url), "utf8"));
@@ -42,7 +43,7 @@ assert.equal(result.application_abi, parent.tuple.applicationAbi);
 assert.equal(result.frame, parent.tuple.frame);
 assert.equal(result.effect_protocol, parent.tuple.effectProtocol);
 
-const root = new URL("../../../../../", import.meta.url).pathname;
+const root = fileURLToPath(new URL("../../../../../", import.meta.url));
 const verification = spawnSync(process.execPath, ["tools/verify-parent.mjs"], {
   cwd: root,
   encoding: "utf8",
