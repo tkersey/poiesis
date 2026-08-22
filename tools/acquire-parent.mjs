@@ -113,6 +113,10 @@ async function materializeRunner(root, lock, roots) {
   command("git", ["fetch", "--quiet", "--force", "--no-tags", repositoryUrl, `refs/tags/${lock.release.tag}:refs/tags/${lock.release.tag}`], { cwd: runner, environment });
   const taggedCommit = command("git", ["rev-parse", `${lock.release.tag}^{commit}`], { cwd: runner, environment });
   if (taggedCommit !== lock.release.tagCommit) throw new Error("parent release tag commit mismatch");
+  command("git", ["fetch", "--quiet", "--force", "--no-tags", repositoryUrl, `refs/tags/${lock.predecessorRelease.tag}:refs/tags/${lock.predecessorRelease.tag}`], { cwd: runner, environment });
+  const predecessorTaggedCommit = command("git", ["rev-parse", `${lock.predecessorRelease.tag}^{commit}`], { cwd: runner, environment });
+  if (predecessorTaggedCommit !== lock.predecessorRelease.tagCommit) throw new Error("predecessor parent release tag commit mismatch");
+  command("git", ["merge-base", "--is-ancestor", predecessorTaggedCommit, taggedCommit], { cwd: runner, environment });
   command("git", ["cat-file", "-e", `${lock.release.candidateCommit}^{commit}`], { cwd: runner, environment });
   command("git", ["update-ref", "refs/heads/release", lock.release.tagCommit], { cwd: runner, environment });
   command("git", ["symbolic-ref", "HEAD", "refs/heads/release"], { cwd: runner, environment });
