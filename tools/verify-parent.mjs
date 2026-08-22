@@ -84,6 +84,14 @@ for (const name of approvalNames) {
 assert.equal(new Set(approvals.map((approval) => approval.requestId)).size, approvals.length);
 assert.equal(new Set(approvals.map((approval) => approval.proposalDigest)).size, approvals.length);
 assert.equal(new Set(approvals.map((approval) => approval.runId)).size, 1);
+assert.equal(sha256(Buffer.from(approvals[0].runId, "utf8")), failedReceipt.run_id_sha256);
+const failedScaffoldEvidenceCommit = "b15281ff26c585752856694c48a73eab669e72c7";
+assert.equal(poiesisGit(["rev-parse", `${failedScaffoldEvidenceCommit}^`]).toString("utf8").trim(), obstruction.failed_scaffold_commit);
+const failedScaffoldLock = JSON.parse(poiesisGit(["show", `${failedScaffoldEvidenceCommit}:conformance/poiesis-v1/scaffold.lock.json`]));
+assert.equal(failedScaffoldLock.baselineTag, "poiesis-v1-scaffold-r13");
+assert.equal(failedScaffoldLock.baselineCommit, obstruction.failed_scaffold_commit);
+assert.equal(new Set(approvals.map((approval) => approval.policyDigest)).size, 1);
+assert.equal(approvals[0].policyDigest, failedScaffoldLock.birthPolicySha256);
 assert.equal(failedReceipt.ordered_interfaces.filter((name) => name === "repo.replace.approved.v2").length, approvals.length);
 for (const path of new Set(approvals.map((approval) => approval.path))) {
   const pathApprovals = approvals.filter((approval) => approval.path === path);
