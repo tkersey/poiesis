@@ -38,6 +38,7 @@ assert.deepEqual(parent.release, {
 assert.deepEqual(parent.predecessorRelease, {
   tag: "v1.0.6",
   tagCommit: "58c1f28cb8087d6a1a284aa25e587c93b7e420e2",
+  applicationId: "d9c7744e1ec5e662ff3830dc2d505b4a5777c89cdac8a29d2d8a9da341701ca5",
 });
 
 assert.deepEqual(parent.assets.map((asset) => asset.name), [
