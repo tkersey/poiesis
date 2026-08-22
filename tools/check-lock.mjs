@@ -22,29 +22,29 @@ assert.deepEqual(parent.tuple, {
 });
 assert.deepEqual(child.tuple, { ...parent.tuple, agent: "2.6.0" });
 assert.deepEqual(parent.release, {
-  repository: "tkersey/praxis", tag: "v1.0.6", tagCommit: "58c1f28cb8087d6a1a284aa25e587c93b7e420e2",
-  candidateCommit: "58c1f28cb8087d6a1a284aa25e587c93b7e420e2",
-  archivedCandidateCommit: "5c6ab18a154ba6c9e66041daf121023398d82109",
-  applicationId: "d9c7744e1ec5e662ff3830dc2d505b4a5777c89cdac8a29d2d8a9da341701ca5",
-  applicationWasmSha256: "37d48880360180b7ae124ecc23f825b315e67ea347d830f12011591ce33b08f6",
-  decisionContractDigest: "b9b5d8e66f12aacc476951cf5eab5bab2e8cca8be5e9117346a6d744cb9f63e0",
-  bindingManifestSha256: "999007d9ab7516d0408dba21e55d3434bd9cafc8fe727449041bc4f3f568f826",
+  repository: "tkersey/praxis", tag: "v1.0.7", tagCommit: "cbfe0d0fd3aba11d857af89baf82874e83337c3b",
+  candidateCommit: "cbfe0d0fd3aba11d857af89baf82874e83337c3b",
+  archivedCandidateCommit: "4563327dcf1a39071e6c4747e7e50b0c75ee8659",
+  applicationId: "6dcf6911c610b85ebd8c90d87ad95ed868107fc9960657ffff4f1e4c2df1e038",
+  applicationWasmSha256: "a574c10abfbb32190405e47848e1dd924cc8dde72af0a4ea8a88539dc36a3ba1",
+  decisionContractDigest: "52dd0677dfa232923d47a8f563dd2ab4b4fb456a5d0d0a6e3cb697a3b7d0e114",
+  bindingManifestSha256: "4cc9187ddcf7097df2343d415d792654562d1c8e7456a639ce0a01f86c04bd93",
   workspaceAdapterSha256: "527930ea1e7b997b2f761e5ca4e082b600dc786d7fb458bb3c9011eed0e3d7e4",
   openaiAdapterSha256: "dd0dca92a4fb04cb059ce6839689aa42ff8a8f6d84664407c59b5ef35b6f69ad",
   codecsSha256: "f73c15ee12a37b12000a5c9f1a4e9ff45ee72f2d80dee4cc789f696188a42510",
-  sourceManifestSha256: "57634e533b2627b35642ec48dafe92c632d27e1c35fe1ff6519205fdd4c81cda",
+  sourceManifestSha256: "f8ea4b1f8a56d5b6c0d8c0a4593bc5b79743235ee4d9f65b1ed122cf3e4fefcb",
 });
 
 assert.deepEqual(parent.assets.map((asset) => asset.name), [
-  "praxis-v1.0.6-artifacts.tar.gz",
-  "praxis-v1.0.6-candidate.json",
-  "praxis-v1.0.6-checksums.txt",
-  "praxis-v1.0.6-runtime.tar.gz",
-  "praxis-v1.0.6-source.tar.gz",
-  "praxis-v1.0.6-successor-receipt.json",
+  "praxis-v1.0.7-artifacts.tar.gz",
+  "praxis-v1.0.7-candidate.json",
+  "praxis-v1.0.7-checksums.txt",
+  "praxis-v1.0.7-runtime.tar.gz",
+  "praxis-v1.0.7-source.tar.gz",
+  "praxis-v1.0.7-successor-receipt.json",
 ]);
 for (const asset of parent.assets) {
-  assert.match(asset.url, /^https:\/\/github\.com\/tkersey\/praxis\/releases\/download\/v1\.0\.6\//);
+  assert.match(asset.url, /^https:\/\/github\.com\/tkersey\/praxis\/releases\/download\/v1\.0\.7\//);
   assert.match(asset.sha256, hex64);
   assert.ok(Number.isSafeInteger(asset.sizeBytes) && asset.sizeBytes > 0);
   assert.ok(Number.isSafeInteger(asset.maximumExpandedBytes) && asset.maximumExpandedBytes >= asset.sizeBytes || asset.expectedRoot === null);
