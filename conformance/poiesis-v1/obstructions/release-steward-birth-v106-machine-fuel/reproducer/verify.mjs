@@ -5,6 +5,16 @@ import { readFile } from "node:fs/promises";
 const result = JSON.parse(await readFile(new URL("../result.json", import.meta.url), "utf8"));
 const parent = JSON.parse(await readFile(new URL("../../../parent.lock.json", import.meta.url), "utf8"));
 
+assert.deepEqual(Object.keys(result).sort(), [
+  "application_abi", "applied_replacements", "effect_count", "effect_protocol",
+  "failed_live_receipt_sha256", "failed_parent_definition_sha256", "failed_parent_release",
+  "failed_parent_tag_commit", "failed_scaffold_commit", "failed_terminal_frame_id",
+  "failed_total_machine_fuel", "failure", "format", "frame", "generated_epistemics_bytes",
+  "machine_abi", "machine_state", "maximum_changed_files", "maximum_decisions",
+  "maximum_effect_actions", "maximum_mutation_operations", "model_authored_abort", "owner",
+  "successor_parent_definition_sha256", "successor_parent_release",
+  "successor_parent_tag_commit", "successor_total_machine_fuel",
+].sort());
 assert.equal(result.format, "poiesis-obstruction/v1");
 assert.equal(result.owner, "parent_application_obstruction");
 assert.equal(result.failed_parent_release, "v1.0.6");

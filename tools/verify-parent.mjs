@@ -20,6 +20,24 @@ const source = acquired.roots[lock.assets.find((asset) => asset.name.endsWith("-
 const runtime = acquired.roots[lock.assets.find((asset) => asset.name.endsWith("-runtime.tar.gz")).name];
 const artifacts = acquired.roots[lock.assets.find((asset) => asset.name.endsWith("-artifacts.tar.gz")).name];
 const parentCorrection = JSON.parse(await readFile(join(source, "conformance/praxis-v1.0.7/obstructions/poiesis-r13-machine-fuel/result.json"), "utf8"));
+assert.deepEqual(Object.keys(obstruction).sort(), [
+  "application_abi", "applied_replacements", "effect_count", "effect_protocol",
+  "failed_live_receipt_sha256", "failed_parent_definition_sha256", "failed_parent_release",
+  "failed_parent_tag_commit", "failed_scaffold_commit", "failed_terminal_frame_id",
+  "failed_total_machine_fuel", "failure", "format", "frame", "generated_epistemics_bytes",
+  "machine_abi", "machine_state", "maximum_changed_files", "maximum_decisions",
+  "maximum_effect_actions", "maximum_mutation_operations", "model_authored_abort", "owner",
+  "successor_parent_definition_sha256", "successor_parent_release",
+  "successor_parent_tag_commit", "successor_total_machine_fuel",
+].sort());
+assert.deepEqual(Object.keys(parentCorrection).sort(), [
+  "application_abi", "effect_protocol", "failed_receipt_sha256", "failed_release",
+  "failed_scaffold_commit", "failed_terminal_failure", "failed_terminal_frame_id",
+  "failed_total_machine_fuel", "failure_applied_replacements", "failure_external_effect_count",
+  "failure_generated_epistemics_bytes", "failure_model_authored_abort", "format", "frame",
+  "machine_abi", "machine_state", "maximum_changed_files", "maximum_decisions",
+  "maximum_effect_actions", "maximum_mutation_operations", "owner", "successor_total_machine_fuel",
+].sort());
 
 function git(args) {
   const result = Bun.spawnSync(["git", ...args], { cwd: acquired.roots.runner, stdout: "pipe", stderr: "pipe" });
